@@ -1,0 +1,6 @@
+set number relativenumber
+syntax on
+set undofile
+let g:chat_gpt_key='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'
+let g:chat_gpt_max_tokens=200
+set backspace=indent,eol,start
