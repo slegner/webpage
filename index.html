@@ -5,6 +5,40 @@
 	<title>Document</title>
 <link rel= "stylesheet" href = "styles.css">
 </head>
+<style>
+	body {font-family: Arial;}
+	/* Style the tab */
+	.tab {
+	  overflow: hidden;
+	  background-color: #f1f1f1;
+	}
+	/* Style the buttons inside the tab */
+	.tab button {
+	  background-color: inherit;
+	  float: left;
+	  border: none;
+	  outline: none;
+	  cursor: pointer;
+	  padding: 14px 16px;
+	  transition: 0.3s;
+	  font-size: 17px;
+	}
+	/* Change background color of buttons on hover */
+	.tab button:hover {
+	  background-color: #ddd;
+	}	
+	/* Create an active/current tablink class */
+	.tab button.active {
+	  background-color: #ccc;
+	}
+	/* Style the tab content */
+	.tabcontent {
+	  display: none;
+	  padding: 6px 12px;
+	  border: 1px solid #ccc;
+	  border-top: none;
+	}
+	</style>
 
 <div class="header">
 	<h2>Welcome to my site</h2>
@@ -12,13 +46,61 @@
 
 <div class="row">
 	<div class="leftcolumn">
+		<div class="tab">
+			<button class="tablinks" onclick="openCity(event, 'London')">Home</button>
+			<button class="tablinks" onclick="openCity(event, 'Allotment')">Allotment Diary</button>
+		  </div>  
+		  <div class="card">
+			<h2>Allotment Diary 5/25</h2>
+			<h5>May 25th, 2023</h5>
+			<div class="card">
+				<a href="/picture/5_25.JPG"> <image style = "width: 33%;" src ="/picture/5_25.jpg" alt = "Allotment"></a>
+				<a href="/picture/5_25_2.JPG"> <image style = "width: 33%;" src ="/picture/5_25_2.jpg" alt = "Squash"></a>
+				<a href="/picture/5_25_3.JPG"> <image style = "width: 33%;" src ="/picture/5_25_3.jpg" alt = "radish"></a>
+			</div>
+			<p>
+				The radishes have grown! I have tasted them, they are very fresh and some of them are quite "spicy". This is the first time I have ever grown something by myself!
+				To be honest, I didn't know when to harvest them, or whether they are harvestable.
+				Everything in the allotment have been growing larger, except for the tomato and strawberry, they seem to be of the same size as last time. The strawberry stems
+				have turned red. I wonder if that is a problem , but google says strawberries naturally have a red pigment in them, so there is nothing to worry about.
+				I have also moved the squash to the allotment. The bottom leaves of the squash has turned yellow, and its roots have been growing out from the bottom of the pot, so it was time...
+			</p>
+			<p>
+				The green house is much better now than before. There are definitel still some bugs on the plants, but it doesn't feel as crazy as last time. I wasn't there for the session
+				where they sprayed soap water on the plants, but whatever they did it seemed to work quite well. When I took out the squash, there were still bugs on the bottom leaves. I blasted it with water and washed off
+				 all the bugs before planting it into my allotment.
+			</p>
+		  </div>
+		  <div class="card">
+			<h2>Allotment Diary 5/10</h2>
+			<h5>May 10th, 2023</h5>
+			<div class="card">
+				<a href="/picture/5_10_3.JPG"> <image style = "width: 33%;" src ="/picture/5_10_3.jpg" alt = "Allotment"></a>
+				<a href="/picture/5_10_2.JPG"> <image style = "width: 33%;" src ="/picture/5_10_2.jpg" alt = "cabbages"></a>
+			</div>
+			<p>	
+			 It hasn't been long since the last update, but everything has been growing quite fast. This must been the magic of spring! I didn't expect that 
+			 the broad beans would grow so fast, but it might be because I have started them at home in a wet tissue paper before sowing them.
+			 The garlics have also grown a lot since last time. Recently coop have been selling
+			 tomato and strawberry seedlings, so I have bought one of each and added them to my allotment. I have heard that tomatoes
+			 are harder to grow because they don't like to be around other plants, but I will give it a try! I have seen there are a lot of 
+			 strawberries growing in other people's allotments, they seem to grow pretty nice and strong, so hopefully my strawberry will be well.
+			</p>
+			<p>
+				The green house has been under an aphid attack!!! Most of the plants there have been covered by bugs, including my cabbages and squash. I have emailed
+				the gardening society and they arranged a sunday session to spary the plants with soap water, hopefully that will work.
+				My brother's sunflower never grew, so I flipped around the soil aand found that the seed was gone. It must have fallen prey to the mouse gang
+				that has been digging and eating seeds from the green house. I have started another seed for him, hopefully this time it will grow before being eaten.
+
+			</p>
+		  </div>
 		<div class="card">
 			<h2>Allotment Diary 4/30</h2>
 			<h5>Apr 30, 2023</h5>
 			<div class="card">
-				<img src="/picture/4_30_0025.jpg" alt = "Allotment" width="400">
-				<img src="/picture/4_30_0026.jpg" alt = "Green house"  width="400">
-				<img src="/picture/4_30_0027.jpg" alt = "Green house"  width="400">
+				<img style ="width: 33%;" src="/picture/4_30_0025.jpg" alt = "Allotment" >
+				<img style ="width: 33%;" src="/picture/4_30_0026.jpg" alt = "Green house" >
+				<img style ="width: 33%;" src="/picture/4_30_0027.jpg" alt = "Green house" >
 			</div>
 			<p>	
 				Here is a picture of my allotment at the moment. Not long has passed since I sowed the seeds.
@@ -58,9 +140,10 @@
 	  </div>
 	</div>
 	<div class="rightcolumn">
+
 	  <div class="card">
 		<h2>About Me</h2>
-		<img src="forg.jpg" alt="me" style="height:200px;"><br>
+		<img style ="width: 100%;" src="forg.jpg" alt="me" style="height:200px;"><br>
 		<!-- <div class="forg.jpg" style="height:100px;"></div> -->
 		<p>I am a frog</p>
 	  </div>
