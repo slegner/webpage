@@ -144,6 +144,29 @@
 				lightbox.style.display = 'none';
 			}
 		});
+
+		// Prevent image credit from overlapping footer
+		function adjustImageCredit() {
+			const credit = document.querySelector('.image-credit');
+			const footer = document.querySelector('.footer');
+
+			if (credit && footer) {
+				const footerRect = footer.getBoundingClientRect();
+				const windowHeight = window.innerHeight;
+
+				// If footer is visible on screen
+				if (footerRect.top < windowHeight) {
+					const distanceFromBottom = windowHeight - footerRect.top + 10;
+					credit.style.bottom = distanceFromBottom + 'px';
+				} else {
+					credit.style.bottom = '10px';
+				}
+			}
+		}
+
+		window.addEventListener('scroll', adjustImageCredit);
+		window.addEventListener('resize', adjustImageCredit);
+		adjustImageCredit(); // Run on load
 	</script>
 
 </body>

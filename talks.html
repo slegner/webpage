@@ -31,12 +31,11 @@
 
 	<!-- Talks Page -->
 	<section class="talks-page">
-		<div class="container">
-			<div class="talks-content">
-				<h2>Talks & Presentations</h2>
+		<div class="talks-content">
+			<h2>Talks & Presentations</h2>
 
-				<!-- Talk 1 - Most Recent -->
-				<div class="talk-block">
+			<!-- Talk 1 - Most Recent -->
+			<div class="talk-block">
 					<div class="talk-header">
 						<h3>Alleviating the Hubble Tension with Torsion Condensation</h3>
 						<span class="talk-date">September 2025</span>
@@ -130,6 +129,31 @@
 			</div>
 		</footer>
 	</section>
+
+	<script>
+		// Prevent image credit from overlapping footer
+		function adjustImageCredit() {
+			const credit = document.querySelector('.image-credit');
+			const footer = document.querySelector('.footer');
+
+			if (credit && footer) {
+				const footerRect = footer.getBoundingClientRect();
+				const windowHeight = window.innerHeight;
+
+				// If footer is visible on screen
+				if (footerRect.top < windowHeight) {
+					const distanceFromBottom = windowHeight - footerRect.top + 10;
+					credit.style.bottom = distanceFromBottom + 'px';
+				} else {
+					credit.style.bottom = '10px';
+				}
+			}
+		}
+
+		window.addEventListener('scroll', adjustImageCredit);
+		window.addEventListener('resize', adjustImageCredit);
+		adjustImageCredit(); // Run on load
+	</script>
 
 </body>
 </html>
