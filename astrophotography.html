@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@400,600&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+    <title>Astrophotography | Sinah Legner</title>
+</head>
+<body>
+
+	<!-- Top Navigation Bar -->
+	<nav class="top-nav">
+		<div class="nav-container">
+			<div class="nav-brand">Sinah Legner | PhD Student</div>
+			<div class="nav-links">
+				<a href="index.html">Home</a>
+				<a href="https://arxiv.org/search/astro-ph?searchtype=author&query=Legner,+S" target="_blank" rel="noopener noreferrer">Publications</a>
+				<a href="talks.html">Talks</a>
+				<a href="astrophotography.html">Astrophotography</a>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Astrophotography Gallery -->
+	<section class="gallery-page">
+		<div class="container">
+			<div class="gallery-content">
+				<h2>Astrophotography</h2>
+				<div class="gallery-grid">
+					<div class="gallery-item">
+						<img src="images/Astrophotography/northamsrica.PNG" alt="North America Nebula">
+						<div class="image-overlay">
+							<h3>North America Nebula</h3>
+							<p>NGC 7000</p>
+							<p>Taken: 9th November 2024</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 30 stacked</p>
+						</div>
+					</div>
+					<div class="gallery-item">
+						<img src="images/Astrophotography/andromeda_pink.jpg" alt="Andromeda Galaxy">
+						<div class="image-overlay">
+							<h3>Andromeda Galaxy</h3>
+							<p>M31</p>
+							<p>Taken: 25th October 2024</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 30 stacked</p>
+						</div>
+					</div>
+					<div class="gallery-item">
+						<img src="images/Astrophotography/pleiades.PNG" alt="Pleiades">
+						<div class="image-overlay">
+							<h3>Pleiades</h3>
+							<p>M45 (Seven Sisters)</p>
+							<p>Taken: 25th October 2024</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 30 stacked</p>
+						</div>
+					</div>
+					<div class="gallery-item">
+						<img src="images/Astrophotography/combinedstar.jpg" alt="Comet C/2025 A6">
+						<div class="image-overlay">
+							<h3>Comet C/2025 A6 (Lemmon)</h3>
+							<p>Taken: 25th October 2024</p>
+							<p>Equipment: Dwarf3</p>
+							<p>15s exposure, gain 60, 15 stacked</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="image-credit">
+			<a href="https://en.wikipedia.org/wiki/North_America_Nebula" target="_blank" rel="noopener noreferrer">North America Nebula, NGC 7000</a>, taken by <a href="https://www.dwarflab.com/" target="_blank" rel="noopener noreferrer">Dwarf3</a>, 9th November
+		</div>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<div class="footer-container">
+				<div class="footer-section">
+					<p><i class="fa-solid fa-envelope"></i> <a href="mailto:sl2091@cam.ac.uk">sl2091@cam.ac.uk</a></p>
+					<p><i class="fa-solid fa-building-columns"></i> Cavendish Laboratory, University of Cambridge</p>
+				</div>
+				<div class="footer-section">
+					<div class="footer-links">
+						<a href="https://github.com/slegner" target="_blank" rel="noopener noreferrer">
+							<i class="fa-brands fa-github"></i> GitHub
+						</a>
+						<a href="https://orcid.org/0009-0000-4019-5314" target="_blank" rel="noopener noreferrer">
+							<i class="fa-brands fa-orcid"></i> ORCID
+						</a>
+						<a href="https://inspirehep.net/authors/2955073" target="_blank" rel="noopener noreferrer">
+							<i class="fa-solid fa-graduation-cap"></i> INSPIRE-HEP
+						</a>
+						<a href="https://arxiv.org/search/astro-ph?searchtype=author&query=Legner,+S" target="_blank" rel="noopener noreferrer">
+							<i class="fa-solid fa-file-text"></i> arXiv
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</section>
+
+	<!-- Lightbox -->
+	<div id="lightbox" class="lightbox">
+		<span class="lightbox-close">&times;</span>
+		<img class="lightbox-content" id="lightbox-img">
+		<div class="lightbox-caption" id="lightbox-caption"></div>
+	</div>
+
+	<script>
+		// Lightbox functionality
+		const lightbox = document.getElementById('lightbox');
+		const lightboxImg = document.getElementById('lightbox-img');
+		const lightboxCaption = document.getElementById('lightbox-caption');
+		const lightboxClose = document.querySelector('.lightbox-close');
+		const galleryItems = document.querySelectorAll('.gallery-item');
+
+		galleryItems.forEach(item => {
+			item.addEventListener('click', function() {
+				const img = this.querySelector('img');
+				const overlay = this.querySelector('.image-overlay');
+
+				lightbox.style.display = 'flex';
+				lightboxImg.src = img.src;
+				lightboxCaption.innerHTML = overlay.innerHTML;
+			});
+		});
+
+		lightboxClose.addEventListener('click', function() {
+			lightbox.style.display = 'none';
+		});
+
+		lightbox.addEventListener('click', function(e) {
+			if (e.target === lightbox) {
+				lightbox.style.display = 'none';
+			}
+		});
+	</script>
+
+</body>
+</html>
