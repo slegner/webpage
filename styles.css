@@ -16,7 +16,7 @@ html {
 
 body {
 		font-family: Arial, sans-serif;
-		background-image: url('images/Astrophotography/northamsrica.PNG');
+		background-image: url('images/Astrophotography/northamerica.png');
 		background-size: cover;
 		background-position: center;
 		background-attachment: fixed;
@@ -219,9 +219,26 @@ a {
 		font-size: 42px;
 		color: #ffffff;
 		text-align: center;
-		margin-bottom: 50px;
+		margin-bottom: 15px;
 		font-weight: 600;
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-note {
+		text-align: center;
+		font-size: 14px;
+		color: rgba(255, 255, 255, 0.7);
+		font-style: italic;
+		margin-bottom: 40px;
+}
+
+.gallery-note a {
+		color: rgba(255, 255, 255, 0.9);
+		text-decoration: underline;
+}
+
+.gallery-note a:hover {
+		color: #ffffff;
 }
 
 .gallery-grid {
@@ -333,6 +350,109 @@ a {
 		margin: 5px 0;
 }
 
+/* CV Page */
+.cv-page {
+		min-height: 100vh;
+		padding-top: 80px;
+		padding-bottom: 0;
+}
+
+.cv-content {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 40px 50px 60px;
+		background-color: rgba(0, 0, 0, 0.6);
+		border-radius: 12px;
+}
+
+.cv-content h2 {
+		font-size: 42px;
+		color: #ffffff;
+		text-align: center;
+		margin-bottom: 15px;
+		font-weight: 600;
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cv-download {
+		text-align: center;
+		margin-bottom: 40px;
+}
+
+.cv-section {
+		margin-bottom: 35px;
+}
+
+.cv-section h3 {
+		font-size: 22px;
+		color: #ffffff;
+		margin-bottom: 20px;
+		padding-bottom: 10px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+		font-weight: 600;
+}
+
+.cv-item {
+		margin-bottom: 20px;
+}
+
+.cv-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 10px;
+}
+
+.cv-title {
+		font-size: 16px;
+		color: #ffffff;
+		font-weight: 600;
+}
+
+.cv-date {
+		font-size: 14px;
+		color: rgba(255, 255, 255, 0.7);
+}
+
+.cv-subtitle {
+		font-size: 14px;
+		color: rgba(255, 255, 255, 0.85);
+		font-style: italic;
+		margin: 5px 0 10px;
+}
+
+.cv-list {
+		list-style-type: disc;
+		padding-left: 20px;
+		margin: 0;
+}
+
+.cv-list li {
+		font-size: 14px;
+		color: rgba(255, 255, 255, 0.8);
+		margin-bottom: 8px;
+		line-height: 1.5;
+}
+
+.cv-list a {
+		color: rgba(255, 255, 255, 0.9);
+		text-decoration: underline;
+}
+
+.cv-list a:hover {
+		color: #ffffff;
+}
+
+.cv-list strong {
+		color: #ffffff;
+}
+
+.skills-list {
+		list-style-type: none;
+		padding-left: 0;
+}
+
 /* Talks Page */
 .talks-page {
 		min-height: 100vh;
@@ -437,7 +557,7 @@ a {
 
 .pdf-viewer iframe {
 		width: 100%;
-		height: 750px;
+		height: 100%;
 		border: none;
 }
 
