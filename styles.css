@@ -695,11 +695,7 @@ a {
 		}
 
 		.pdf-viewer {
-				height: 400px;
-		}
-
-		.pdf-viewer iframe {
-				height: 400px;
+				display: none;
 		}
 
 		/* Gallery */
@@ -762,10 +758,6 @@ a {
 		}
 
 		.pdf-viewer {
-				height: 300px;
-		}
-
-		.pdf-viewer iframe {
-				height: 300px;
+				display: none;
 		}
 }
