@@ -14,7 +14,7 @@
 
   <!-- CV Page -->
   <url>
-    <loc>https://slegner.co.uk/cv.html</loc>
+    <loc>https://slegner.co.uk/cv/</loc>
     <lastmod>2025-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -22,7 +22,7 @@
 
   <!-- Talks Page -->
   <url>
-    <loc>https://slegner.co.uk/talks.html</loc>
+    <loc>https://slegner.co.uk/talks/</loc>
     <lastmod>2025-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -30,7 +30,7 @@
 
   <!-- Astrophotography Page -->
   <url>
-    <loc>https://slegner.co.uk/astrophotography.html</loc>
+    <loc>https://slegner.co.uk/astrophotography/</loc>
     <lastmod>2025-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
