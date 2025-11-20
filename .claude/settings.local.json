@@ -1,8 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit:*)"
+      "Bash(for f in *.jpg *.png *.PNG)",
+      "Bash(do [ -f \"$f\" ])",
+      "Bash([ \"$f\" != \"northamerica-optimized.jpg\" ])"
     ],
-    "deny": []
+    "deny": [],
+    "ask": []
   }
 }
