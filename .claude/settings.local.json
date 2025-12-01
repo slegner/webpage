@@ -1,9 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(for f in *.jpg *.png *.PNG)",
-      "Bash(do [ -f \"$f\" ])",
-      "Bash([ \"$f\" != \"northamerica-optimized.jpg\" ])"
+      "Bash(magick:*)",
+      "Bash(sips:*)"
     ],
     "deny": [],
     "ask": []
