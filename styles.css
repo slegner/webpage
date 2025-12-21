@@ -308,7 +308,6 @@ a {
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		overflow-y: auto;
 }
 
 .lightbox-content {
@@ -318,23 +317,24 @@ a {
 		border-radius: 8px;
 }
 
-.lightbox-video-description {
-		color: white;
-		font-size: 18px;
+.lightbox-video-link {
+		margin-top: 20px;
 		text-align: center;
-		font-style: italic;
-		padding: 20px 25px;
-		background-color: rgba(255, 255, 255, 0.15);
-		border-radius: 8px;
-		max-width: 600px;
-		margin: 20px auto;
 }
 
-.lightbox-video {
-		max-width: 90%;
-		max-height: 80vh;
-		object-fit: contain;
-		border-radius: 8px;
+.lightbox-video-link a {
+		color: #ffffff;
+		font-size: 16px;
+		text-decoration: none;
+		padding: 10px 20px;
+		background-color: rgba(255, 255, 255, 0.1);
+		border-radius: 6px;
+		transition: background-color 0.3s ease;
+		display: inline-block;
+}
+
+.lightbox-video-link a:hover {
+		background-color: rgba(255, 255, 255, 0.2);
 }
 
 .lightbox-close {
@@ -357,7 +357,9 @@ a {
 		color: white;
 		text-align: center;
 		padding: 20px;
-		max-width: 600px;
+		max-width: 700px;
+		margin: 0 auto;
+		display: block;
 }
 
 .lightbox-caption h3 {

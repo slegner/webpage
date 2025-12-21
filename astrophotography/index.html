@@ -198,8 +198,9 @@
 	<div id="lightbox" class="lightbox">
 		<span class="lightbox-close">&times;</span>
 		<img class="lightbox-content" id="lightbox-img">
-		<div class="lightbox-video-description" id="lightbox-video-description" style="display: none;"></div>
-		<img class="lightbox-video" id="lightbox-video" style="display: none;">
+		<div class="lightbox-video-link" id="lightbox-video-link" style="display: none;">
+			<a href="#" id="toggle-video-link">View video showing movement →</a>
+		</div>
 		<div class="lightbox-caption" id="lightbox-caption"></div>
 	</div>
 
@@ -207,11 +208,15 @@
 		// Lightbox functionality
 		const lightbox = document.getElementById('lightbox');
 		const lightboxImg = document.getElementById('lightbox-img');
-		const lightboxVideo = document.getElementById('lightbox-video');
-		const lightboxVideoDescription = document.getElementById('lightbox-video-description');
 		const lightboxCaption = document.getElementById('lightbox-caption');
+		const lightboxVideoLink = document.getElementById('lightbox-video-link');
+		const toggleVideoLink = document.getElementById('toggle-video-link');
 		const lightboxClose = document.querySelector('.lightbox-close');
 		const galleryItems = document.querySelectorAll('.gallery-item');
+
+		let currentImageSrc = '';
+		let currentVideoSrc = '';
+		let showingVideo = false;
 
 		galleryItems.forEach(item => {
 			item.addEventListener('click', function() {
@@ -221,34 +226,45 @@
 				const videoSrc = this.getAttribute('data-video-src');
 
 				lightbox.style.display = 'flex';
-				lightbox.scrollTop = 0;
-				document.body.style.overflow = 'hidden';
-				lightboxImg.src = img.src;
+				currentImageSrc = img.src;
+				lightboxImg.src = currentImageSrc;
 				lightboxCaption.innerHTML = overlay.innerHTML;
+				showingVideo = false;
 
-				// Show video if it exists
+				// Show video link if video exists
 				if (hasVideo === 'true' && videoSrc) {
-					lightboxVideo.src = videoSrc;
-					lightboxVideo.style.display = 'block';
-					lightboxVideoDescription.textContent = 'Video showing comet movement over 30 minutes';
-					lightboxVideoDescription.style.display = 'block';
+					currentVideoSrc = videoSrc;
+					lightboxVideoLink.style.display = 'block';
+					toggleVideoLink.textContent = 'View video showing movement →';
 				} else {
-					lightboxVideo.style.display = 'none';
-					lightboxVideo.src = '';
-					lightboxVideoDescription.style.display = 'none';
+					lightboxVideoLink.style.display = 'none';
 				}
 			});
 		});
 
+		// Toggle between image and video
+		toggleVideoLink.addEventListener('click', function(e) {
+			e.preventDefault();
+			if (showingVideo) {
+				// Switch to image
+				lightboxImg.src = currentImageSrc;
+				toggleVideoLink.textContent = 'View video showing movement →';
+				showingVideo = false;
+			} else {
+				// Switch to video
+				lightboxImg.src = currentVideoSrc;
+				toggleVideoLink.textContent = '← View stacked image';
+				showingVideo = true;
+			}
+		});
+
 		lightboxClose.addEventListener('click', function() {
 			lightbox.style.display = 'none';
-			document.body.style.overflow = ''; // Restore body scroll
 		});
 
 		lightbox.addEventListener('click', function(e) {
 			if (e.target === lightbox) {
 				lightbox.style.display = 'none';
-				document.body.style.overflow = ''; // Restore body scroll
 			}
 		});
 
