@@ -7,7 +7,7 @@
 
 	<!-- SEO Meta Tags -->
 	<meta name="description" content="Astrophotography gallery by Sinah Legner featuring deep sky images of nebulae, galaxies, and star clusters captured with Dwarf3 telescope.">
-	<meta name="keywords" content="astrophotography, Pacman Nebula, North America Nebula, Andromeda Galaxy, Pleiades, Comet, NGC 281, NGC 7000, M31, M45, Dwarf3, deep sky imaging">
+	<meta name="keywords" content="astrophotography, Orion Nebula, Horsehead Nebula, Heart Nebula, Christmas Tree Cluster, Pacman Nebula, North America Nebula, Andromeda Galaxy, Pleiades, Comet, M42, B33, IC 1805, NGC 2264, NGC 281, NGC 7000, M31, M45, Dwarf3, deep sky imaging">
 	<meta name="author" content="Sinah Legner">
 	<meta name="robots" content="index, follow">
 	<link rel="canonical" href="https://slegner.co.uk/astrophotography/">
@@ -50,6 +50,50 @@
 				<h2>Astrophotography</h2>
 				<p class="gallery-note">Post processing done with <a href="https://siril.org/" target="_blank" rel="noopener noreferrer">Siril</a></p>
 				<div class="gallery-grid">
+					<div class="gallery-item" data-has-video="true" data-video-src="../images/Astrophotography/3iatlas.gif">
+						<img src="../images/Astrophotography/3iatlas-opt.jpg" alt="Comet 3I/ATLAS" loading="lazy">
+						<div class="image-overlay">
+							<h3>Comet 3I/ATLAS</h3>
+							<p>Taken: 19th December 2025</p>
+							<p>Location: Cambridge, UK</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 30 stacked</p>
+						</div>
+					</div>
+					<div class="gallery-item">
+						<img src="../images/Astrophotography/Heartnebula-opt.jpg" alt="Heart Nebula" loading="lazy">
+						<div class="image-overlay">
+							<h3>Heart Nebula</h3>
+							<p>IC 1805</p>
+							<p>Taken: 19th December 2025</p>
+							<p>Location: Cambridge, UK</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 90 stacked</p>
+							<p>Mosaic technique used</p>
+						</div>
+					</div>
+					<div class="gallery-item">
+						<img src="../images/Astrophotography/Horsehead-opt.jpg" alt="Horsehead and Flame Nebula" loading="lazy">
+						<div class="image-overlay">
+							<h3>Horsehead and Flame Nebula</h3>
+							<p>Barnard 33 & NGC 2024</p>
+							<p>Taken: 16th December 2025</p>
+							<p>Location: Cambridge, UK</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 150 stacked</p>
+						</div>
+					</div>
+					<div class="gallery-item">
+						<img src="../images/Astrophotography/Orion-opt.jpg" alt="Orion Nebula" loading="lazy">
+						<div class="image-overlay">
+							<h3>Orion Nebula</h3>
+							<p>M42</p>
+							<p>Taken: 16th December 2025</p>
+							<p>Location: Cambridge, UK</p>
+							<p>Equipment: Dwarf3</p>
+							<p>60s exposure, gain 60, 150 stacked</p>
+						</div>
+					</div>
 					<div class="gallery-item">
 						<img src="../images/Astrophotography/Christmastree-opt.jpg" alt="Christmas Tree Cluster" loading="lazy">
 						<div class="image-overlay">
@@ -154,6 +198,8 @@
 	<div id="lightbox" class="lightbox">
 		<span class="lightbox-close">&times;</span>
 		<img class="lightbox-content" id="lightbox-img">
+		<div class="lightbox-video-description" id="lightbox-video-description" style="display: none;"></div>
+		<img class="lightbox-video" id="lightbox-video" style="display: none;">
 		<div class="lightbox-caption" id="lightbox-caption"></div>
 	</div>
 
@@ -161,6 +207,8 @@
 		// Lightbox functionality
 		const lightbox = document.getElementById('lightbox');
 		const lightboxImg = document.getElementById('lightbox-img');
+		const lightboxVideo = document.getElementById('lightbox-video');
+		const lightboxVideoDescription = document.getElementById('lightbox-video-description');
 		const lightboxCaption = document.getElementById('lightbox-caption');
 		const lightboxClose = document.querySelector('.lightbox-close');
 		const galleryItems = document.querySelectorAll('.gallery-item');
@@ -169,20 +217,38 @@
 			item.addEventListener('click', function() {
 				const img = this.querySelector('img');
 				const overlay = this.querySelector('.image-overlay');
+				const hasVideo = this.getAttribute('data-has-video');
+				const videoSrc = this.getAttribute('data-video-src');
 
 				lightbox.style.display = 'flex';
+				lightbox.scrollTop = 0;
+				document.body.style.overflow = 'hidden';
 				lightboxImg.src = img.src;
 				lightboxCaption.innerHTML = overlay.innerHTML;
+
+				// Show video if it exists
+				if (hasVideo === 'true' && videoSrc) {
+					lightboxVideo.src = videoSrc;
+					lightboxVideo.style.display = 'block';
+					lightboxVideoDescription.textContent = 'Video showing comet movement over 30 minutes';
+					lightboxVideoDescription.style.display = 'block';
+				} else {
+					lightboxVideo.style.display = 'none';
+					lightboxVideo.src = '';
+					lightboxVideoDescription.style.display = 'none';
+				}
 			});
 		});
 
 		lightboxClose.addEventListener('click', function() {
 			lightbox.style.display = 'none';
+			document.body.style.overflow = ''; // Restore body scroll
 		});
 
 		lightbox.addEventListener('click', function(e) {
 			if (e.target === lightbox) {
 				lightbox.style.display = 'none';
+				document.body.style.overflow = ''; // Restore body scroll
 			}
 		});
 

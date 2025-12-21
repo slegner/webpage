@@ -308,6 +308,7 @@ a {
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
+		overflow-y: auto;
 }
 
 .lightbox-content {
@@ -317,8 +318,27 @@ a {
 		border-radius: 8px;
 }
 
+.lightbox-video-description {
+		color: white;
+		font-size: 18px;
+		text-align: center;
+		font-style: italic;
+		padding: 20px 25px;
+		background-color: rgba(255, 255, 255, 0.15);
+		border-radius: 8px;
+		max-width: 600px;
+		margin: 20px auto;
+}
+
+.lightbox-video {
+		max-width: 90%;
+		max-height: 80vh;
+		object-fit: contain;
+		border-radius: 8px;
+}
+
 .lightbox-close {
-		position: absolute;
+		position: fixed;
 		top: 20px;
 		right: 40px;
 		color: white;
