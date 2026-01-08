@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(magick:*)",
-      "Bash(sips:*)"
+      "Bash(sips:*)",
+      "Read(//Users/starfish/Desktop/stardew/icons/**)",
+      "WebFetch(domain:stardewvalleywiki.com)",
+      "Read(//Users/starfish/Desktop/stardew/picture/**)"
     ],
     "deny": [],
     "ask": []
