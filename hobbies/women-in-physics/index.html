@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- SEO Meta Tags -->
+	<meta name="description" content="Women in Physics series by Sinah Legner - Introducing remarkable women in the history of physics (in Chinese).">
+	<meta name="keywords" content="Sinah Legner, women in physics, female physicists, Wu Chien-Shiung, Vera Rubin">
+	<meta name="author" content="Sinah Legner">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://slegner.co.uk/hobbies/women-in-physics/">
+
+	<!-- Open Graph / Social Media -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://slegner.co.uk/hobbies/women-in-physics/">
+	<meta property="og:title" content="Women in Physics | Sinah Legner">
+	<meta property="og:description" content="A series introducing remarkable women in the history of physics (in Chinese).">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@400,600&display=swap" rel="stylesheet">
+
+	<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+	<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+	<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript>
+
+    <link rel="stylesheet" href="../../styles.css">
+    <title>Women in Physics | Sinah Legner</title>
+
+	<style>
+		.wip-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 25px;
+			margin-top: 10px;
+		}
+
+		.wip-card {
+			cursor: pointer;
+			border-radius: 10px;
+			overflow: hidden;
+			border: 2px solid rgba(255, 255, 255, 0.1);
+			transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+			background-color: rgba(255, 255, 255, 0.05);
+		}
+
+		.wip-card:hover {
+			transform: translateY(-6px);
+			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+			border-color: rgba(255, 255, 255, 0.3);
+		}
+
+		.wip-card img {
+			width: 100%;
+			display: block;
+		}
+
+		.wip-card-hint {
+			text-align: center;
+			padding: 12px;
+			font-size: 13px;
+			color: rgba(255, 255, 255, 0.6);
+		}
+
+		.wip-note {
+			text-align: center;
+			font-size: 14px;
+			color: rgba(255, 255, 255, 0.65);
+			font-style: italic;
+			margin-bottom: 30px;
+		}
+
+		/* Slideshow lightbox */
+		.wip-lightbox {
+			display: none;
+			position: fixed;
+			z-index: 2000;
+			inset: 0;
+			background-color: rgba(0, 0, 0, 0.96);
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		}
+
+		.wip-lightbox.active {
+			display: flex;
+		}
+
+		.wip-lightbox-img {
+			max-width: 90vw;
+			max-height: 82vh;
+			object-fit: contain;
+			border-radius: 6px;
+		}
+
+		.wip-lightbox-close {
+			position: fixed;
+			top: 20px;
+			right: 40px;
+			color: white;
+			font-size: 48px;
+			font-weight: bold;
+			cursor: pointer;
+			line-height: 1;
+			transition: color 0.2s ease;
+			z-index: 2001;
+		}
+
+		.wip-lightbox-close:hover {
+			color: #ccc;
+		}
+
+		.wip-lightbox-nav {
+			display: flex;
+			align-items: center;
+			gap: 30px;
+			margin-top: 16px;
+		}
+
+		.wip-nav-btn {
+			background: rgba(255, 255, 255, 0.1);
+			border: none;
+			color: white;
+			font-size: 22px;
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			cursor: pointer;
+			transition: background 0.2s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.wip-nav-btn:hover {
+			background: rgba(255, 255, 255, 0.25);
+		}
+
+		.wip-nav-btn:disabled {
+			opacity: 0.25;
+			cursor: default;
+		}
+
+		.wip-slide-counter {
+			color: rgba(255, 255, 255, 0.75);
+			font-size: 15px;
+			min-width: 60px;
+			text-align: center;
+		}
+
+		@media (max-width: 768px) {
+			.wip-grid {
+				grid-template-columns: 1fr !important;
+			}
+
+			.wip-lightbox-img {
+				max-width: 96vw;
+				max-height: 75vh;
+			}
+
+			.wip-lightbox-close {
+				top: 10px;
+				right: 20px;
+				font-size: 36px;
+			}
+		}
+	</style>
+</head>
+<body>
+
+	<!-- Top Navigation Bar -->
+	<nav class="top-nav">
+		<div class="nav-container">
+			<div class="nav-brand">Sinah Legner | PhD Student</div>
+			<div class="nav-links">
+				<a href="/">Home</a>
+				<a href="/cv/">CV</a>
+				<a href="/talks/">Talks</a>
+				<a href="/projects/">Projects</a>
+				<a href="/hobbies/">Hobbies</a>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Women in Physics Page -->
+	<section class="projects-page">
+		<div class="container">
+			<div class="projects-content">
+				<h2>Women in Physics</h2>
+				<p class="wip-note">一个介绍物理学史上杰出女性的系列（中文）。点击卡片查看详情。<br>
+				A series introducing remarkable women in the history of physics (in Chinese). Click a card to read more.</p>
+
+				<div class="wip-grid">
+
+					<!-- Wu Chien-Shiung -->
+					<div class="wip-card" data-slides='["../../images/WomeninPhysics/Wu-1.png","../../images/WomeninPhysics/Wu-2.png","../../images/WomeninPhysics/Wu-3.png"]'>
+						<img src="../../images/WomeninPhysics/Wu-1.png" alt="吴健雄 Wu Chien-Shiung">
+						<div class="wip-card-hint"><i class="fa-solid fa-images"></i> 点击查看 / Click to read</div>
+					</div>
+
+					<!-- Vera Rubin -->
+					<div class="wip-card" data-slides='["../../images/WomeninPhysics/Rubin-1.png","../../images/WomeninPhysics/Rubin-2.png","../../images/WomeninPhysics/Rubin-3.png"]'>
+						<img src="../../images/WomeninPhysics/Rubin-1.png" alt="薇拉·鲁宾 Vera Rubin">
+						<div class="wip-card-hint"><i class="fa-solid fa-images"></i> 点击查看 / Click to read</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="image-credit">
+			<a href="https://en.wikipedia.org/wiki/North_America_Nebula" target="_blank" rel="noopener noreferrer">North America Nebula, NGC 7000</a>, taken by <a href="https://www.dwarflab.com/" target="_blank" rel="noopener noreferrer">Dwarf3</a>, 9th November
+		</div>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<div class="footer-container">
+				<div class="footer-section">
+					<p><i class="fa-solid fa-envelope"></i> <a href="mailto:sl2091@cam.ac.uk">sl2091@cam.ac.uk</a></p>
+					<p><i class="fa-solid fa-building-columns"></i> Cavendish Laboratory, University of Cambridge</p>
+				</div>
+				<div class="footer-section">
+					<div class="footer-links">
+						<a href="https://github.com/slegner" target="_blank" rel="noopener noreferrer">
+							<i class="fa-brands fa-github"></i> GitHub
+						</a>
+						<a href="https://orcid.org/0009-0000-4019-5314" target="_blank" rel="noopener noreferrer">
+							<i class="fa-brands fa-orcid"></i> ORCID
+						</a>
+						<a href="https://inspirehep.net/authors/2955073" target="_blank" rel="noopener noreferrer">
+							<i class="fa-solid fa-graduation-cap"></i> INSPIRE-HEP
+						</a>
+						<a href="https://arxiv.org/search/astro-ph?searchtype=author&query=Legner,+S" target="_blank" rel="noopener noreferrer">
+							<i class="fa-solid fa-file-text"></i> arXiv
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</section>
+
+	<!-- Slideshow Lightbox -->
+	<div id="wip-lightbox" class="wip-lightbox">
+		<span class="wip-lightbox-close" id="wip-close">&times;</span>
+		<img class="wip-lightbox-img" id="wip-img" src="" alt="">
+		<div class="wip-lightbox-nav">
+			<button class="wip-nav-btn" id="wip-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+			<span class="wip-slide-counter" id="wip-counter">1 / 3</span>
+			<button class="wip-nav-btn" id="wip-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
+		</div>
+	</div>
+
+	<script>
+		const lightbox = document.getElementById('wip-lightbox');
+		const img = document.getElementById('wip-img');
+		const counter = document.getElementById('wip-counter');
+		const prevBtn = document.getElementById('wip-prev');
+		const nextBtn = document.getElementById('wip-next');
+
+		let slides = [];
+		let current = 0;
+
+		function showSlide(index) {
+			current = index;
+			img.src = slides[current];
+			counter.textContent = `${current + 1} / ${slides.length}`;
+			prevBtn.disabled = current === 0;
+			nextBtn.disabled = current === slides.length - 1;
+		}
+
+		document.querySelectorAll('.wip-card').forEach(card => {
+			card.addEventListener('click', () => {
+				slides = JSON.parse(card.dataset.slides);
+				lightbox.classList.add('active');
+				showSlide(0);
+			});
+		});
+
+		prevBtn.addEventListener('click', () => { if (current > 0) showSlide(current - 1); });
+		nextBtn.addEventListener('click', () => { if (current < slides.length - 1) showSlide(current + 1); });
+
+		document.getElementById('wip-close').addEventListener('click', () => lightbox.classList.remove('active'));
+		lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('active'); });
+
+		// Keyboard navigation
+		document.addEventListener('keydown', e => {
+			if (!lightbox.classList.contains('active')) return;
+			if (e.key === 'ArrowLeft') { if (current > 0) showSlide(current - 1); }
+			else if (e.key === 'ArrowRight') { if (current < slides.length - 1) showSlide(current + 1); }
+			else if (e.key === 'Escape') lightbox.classList.remove('active');
+		});
+	</script>
+
+	<script>
+		// Prevent image credit from overlapping footer
+		function adjustImageCredit() {
+			const credit = document.querySelector('.image-credit');
+			const footer = document.querySelector('.footer');
+
+			if (credit && footer) {
+				const footerRect = footer.getBoundingClientRect();
+				const windowHeight = window.innerHeight;
+
+				if (footerRect.top < windowHeight) {
+					const distanceFromBottom = windowHeight - footerRect.top + 10;
+					credit.style.bottom = distanceFromBottom + 'px';
+				} else {
+					credit.style.bottom = '10px';
+				}
+			}
+		}
+
+		window.addEventListener('scroll', adjustImageCredit);
+		window.addEventListener('resize', adjustImageCredit);
+		adjustImageCredit();
+	</script>
+
+</body>
+</html>

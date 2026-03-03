@@ -28,6 +28,24 @@
 
     <link rel="stylesheet" href="../styles.css">
     <title>Hobbies | Sinah Legner</title>
+	<style>
+		.wip-preview {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+			margin-bottom: 15px;
+			border-radius: 8px;
+			overflow: hidden;
+		}
+		.wip-preview img {
+			width: 100%;
+			display: block;
+			transition: transform 0.3s ease;
+		}
+		.hobby-card:hover .wip-preview img {
+			transform: scale(1.03);
+		}
+	</style>
 </head>
 <body>
 
@@ -63,6 +81,19 @@
 							<img src="../images/Astrophotography/andromeda_pink-opt.jpg" alt="Andromeda Galaxy">
 							<img src="../images/Astrophotography/pleiades-opt.jpg" alt="Pleiades">
 							<img src="../images/Astrophotography/northamerica-opt.jpg" alt="North America Nebula">
+						</div>
+					</a>
+				</div>
+
+				<!-- Women in Physics -->
+				<div class="hobby-card">
+					<h3>Women in Physics 物理学中的女性</h3>
+					<p class="hobby-description">一个介绍物理学史上杰出女性的系列（中文）。点击查看！<br>
+					A series introducing remarkable women in the history of physics, written in Chinese. Click to read!</p>
+					<a href="/hobbies/women-in-physics/" class="hobby-link">
+						<div class="wip-preview">
+							<img src="../images/WomeninPhysics/Wu-1.png" alt="吴健雄 Wu Chien-Shiung">
+							<img src="../images/WomeninPhysics/Rubin-1.png" alt="薇拉·鲁宾 Vera Rubin">
 						</div>
 					</a>
 				</div>
