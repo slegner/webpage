@@ -150,6 +150,53 @@
 			text-align: center;
 		}
 
+		.wip-intro {
+			background-color: rgba(255, 255, 255, 0.05);
+			border-left: 3px solid rgba(255, 255, 255, 0.3);
+			border-radius: 4px;
+			padding: 20px 25px;
+			margin-top: 35px;
+		}
+
+		.wip-intro p {
+			font-size: 15px;
+			color: rgba(255, 255, 255, 0.85);
+			line-height: 1.9;
+			margin-bottom: 12px;
+		}
+
+		.wip-intro p:last-child {
+			margin-bottom: 0;
+		}
+
+		.wip-intro-lang-toggle {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 16px;
+		}
+
+		.wip-lang-btn {
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: rgba(255, 255, 255, 0.6);
+			padding: 4px 14px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 13px;
+			transition: all 0.2s ease;
+		}
+
+		.wip-lang-btn.active {
+			background: rgba(255, 255, 255, 0.2);
+			border-color: rgba(255, 255, 255, 0.5);
+			color: white;
+		}
+
+		.wip-lang-btn:hover:not(.active) {
+			background: rgba(255, 255, 255, 0.12);
+			color: rgba(255, 255, 255, 0.85);
+		}
+
 		@media (max-width: 768px) {
 			.wip-grid {
 				grid-template-columns: 1fr !important;
@@ -226,6 +273,28 @@
 					</div>
 
 				</div>
+
+				<div class="wip-intro">
+					<div class="wip-intro-lang-toggle">
+						<button class="wip-lang-btn active" data-lang="zh">中文</button>
+						<button class="wip-lang-btn" data-lang="en">English</button>
+					</div>
+
+					<div class="wip-intro-zh">
+						<p>我能够很快地说出很多物理学家的名字：爱因斯坦、玻尔、狄拉克、费曼……</p>
+						<p>但如果问：女性物理学家呢？我的第一反应只有居里夫人。第一次看到「诺特定理」的时候，我甚至下意识觉得「诺特」一定是个男性的名字。</p>
+						<p>我总是告诉自己「科学没有性别。」但当我真的试着去想，却发现自己几乎说不出几个女性科学家的名字。</p>
+						<p>于是我想做一个系列，去讲讲这些女性物理学家的故事。不仅是为了让更多人认识她们，其实也是在给自己补一堂迟到的课。原来在物理史里，一直都有她们的名字。</p>
+					</div>
+
+					<div class="wip-intro-en" style="display:none">
+						<p>I can easily name physicists like Einstein, Bohr, Dirac…</p>
+						<p>But when it comes to women in physics, the first name that comes to mind is usually just Marie Curie. The first time I saw Noether's theorem, I simply assumed "Noether" must be a man's name. I often tell myself science has no gender. But when I actually tried to think of women physicists, I realized I could hardly name any.</p>
+						<p>So I decided to start this series — to tell the stories of women in physics.</p>
+						<p>Not only so that more people can learn about them, but also because I realized I needed to learn them too.</p>
+					</div>
+				</div>
+
 			</div>
 		</div>
 
@@ -309,6 +378,19 @@
 			if (e.key === 'ArrowLeft') { if (current > 0) showSlide(current - 1); }
 			else if (e.key === 'ArrowRight') { if (current < slides.length - 1) showSlide(current + 1); }
 			else if (e.key === 'Escape') lightbox.classList.remove('active');
+		});
+	</script>
+
+	<script>
+		// Language toggle
+		document.querySelectorAll('.wip-lang-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				const lang = btn.dataset.lang;
+				document.querySelectorAll('.wip-lang-btn').forEach(b => b.classList.remove('active'));
+				btn.classList.add('active');
+				document.querySelector('.wip-intro-zh').style.display = lang === 'zh' ? 'block' : 'none';
+				document.querySelector('.wip-intro-en').style.display = lang === 'en' ? 'block' : 'none';
+			});
 		});
 	</script>
 
