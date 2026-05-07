@@ -6,8 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- SEO Meta Tags -->
-	<meta name="description" content="Purrductivity is a cozy focus app where you study alongside an orange cat and slowly build a space that attracts even more cat companions.">
-	<meta name="keywords" content="Purrductivity, study cat, focus timer, Pomodoro, iOS app, Apple Watch app, cat collection, productivity">
+	<meta name="description" content="Purrductivity (专注了喵) is a cozy focus app where you study alongside an orange cat and slowly build a space that attracts even more cat companions.">
+	<meta name="keywords" content="Purrductivity, 专注了喵, study cat, focus timer, Pomodoro, iOS app, Apple Watch app, cat collection, productivity">
 	<meta name="author" content="Sinah Legner">
 	<meta name="robots" content="index, follow">
 	<link rel="canonical" href="https://slegner.co.uk/projects/purrductivity/">
@@ -154,6 +154,37 @@
 			color: rgba(255, 255, 255, 0.6);
 			margin-top: 14px;
 		}
+
+		/* Language toggle */
+		.lang-toggle {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 20px;
+			justify-content: flex-end;
+		}
+		.lang-btn {
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: rgba(255, 255, 255, 0.6);
+			padding: 4px 14px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 13px;
+			font-family: inherit;
+			transition: all 0.2s ease;
+		}
+		.lang-btn.active {
+			background: rgba(255, 255, 255, 0.2);
+			border-color: rgba(255, 255, 255, 0.5);
+			color: white;
+		}
+		.lang-btn:hover:not(.active) {
+			background: rgba(255, 255, 255, 0.12);
+			color: rgba(255, 255, 255, 0.85);
+		}
+		.lang-zh { display: none; }
+		body.show-zh .lang-en { display: none; }
+		body.show-zh .lang-zh { display: revert; }
 	</style>
 </head>
 <body>
@@ -177,56 +208,89 @@
 		<div class="container">
 			<div class="blog-content">
 
+				<!-- Language toggle -->
+				<div class="lang-toggle">
+					<button class="lang-btn active" data-lang="en">English</button>
+					<button class="lang-btn" data-lang="zh">中文</button>
+				</div>
+
 				<div class="app-hero">
 					<img src="images/app-icon.png" alt="Purrductivity app icon" class="app-icon">
 					<div class="app-hero-text">
-						<h1>Purrductivity</h1>
-						<p class="app-tagline">Start small. Stay focused. Let the cats come to you.</p>
+						<h1 class="lang-en">Purrductivity</h1>
+						<h1 class="lang-zh">专注了喵</h1>
+						<p class="app-tagline lang-en">Start small. Stay focused. Let the cats come to you.</p>
+						<p class="app-tagline lang-zh">慢慢来，专注当下，让猫咪们来找你。</p>
 					</div>
 				</div>
 
-				<p>Purrductivity is a cozy focus app where you study alongside an orange cat, and slowly build a space that attracts even more cat companions.</p>
+				<p class="lang-en">Purrductivity is a cozy focus app where you study alongside an orange cat, and slowly build a space that attracts even more cat companions.</p>
+				<p class="lang-zh">「专注了喵」是一款温馨的专注应用，让你在橘猫的陪伴下慢慢进入专注状态，也一点点打造一个吸引更多猫咪同伴的空间。</p>
 
-				<p><strong>In collaboration with</strong> <a href="https://run2achieve.info/" target="_blank" rel="noopener noreferrer" style="color: rgba(120, 200, 255, 1); text-decoration: none;">Run2Achieve Ltd <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></a>.</p>
+				<p class="lang-en">
+					<strong>In collaboration with</strong>
+					<a href="https://run2achieve.info/" target="_blank" rel="noopener noreferrer" style="color: rgba(120, 200, 255, 1); text-decoration: none;">Run2Achieve Ltd <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></a>.
+				</p>
+				<p class="lang-zh">
+					与 <a href="https://run2achieve.info/" target="_blank" rel="noopener noreferrer" style="color: rgba(120, 200, 255, 1); text-decoration: none;">Run2Achieve Ltd <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></a> 合作开发。
+				</p>
 
-				<h3>How it works</h3>
-				<ul>
+				<h3 class="lang-en">How it works</h3>
+				<h3 class="lang-zh">如何使用</h3>
+				<ul class="lang-en">
 					<li>Focus for 5 minutes to earn a tuna biscuit</li>
 					<li>Use tuna biscuits to buy decorations for your study room</li>
 					<li>Every 25 minutes, a cat may join your session</li>
 					<li>Different decorations attract different cats</li>
 				</ul>
+				<ul class="lang-zh">
+					<li>每专注 5 分钟，就能获得一块小鱼干</li>
+					<li>用小鱼干购买装饰品来布置你的学习空间</li>
+					<li>每经过 25 分钟，可能会有新的猫咪来陪你一起专注</li>
+					<li>不同的装饰品会吸引不同的猫咪</li>
+				</ul>
 
-				<p>Track your progress with simple stats on focus time and session history, and get personalized suggestions based on your health data from your Apple Watch.</p>
+				<p class="lang-en">Track your progress with simple stats on focus time and session history, and get personalized suggestions based on your health data from your Apple Watch.</p>
+				<p class="lang-zh">用简单的统计图表记录你的专注时间与会话习惯。如果你使用 Apple Watch，还可以根据健康数据获得个性化建议。</p>
 
-				<p><em>Start small. Stay focused. Let the cats come to you.</em></p>
+				<p class="lang-en"><em>Start small. Stay focused. Let the cats come to you.</em></p>
+				<p class="lang-zh"><em>慢慢来，专注当下，让猫咪们来找你。</em></p>
 
-				<h3>Screenshots</h3>
+				<h3 class="lang-en">Screenshots</h3>
+				<h3 class="lang-zh">截图</h3>
 				<div class="screenshot-grid">
 					<figure>
 						<img src="images/home.png" alt="Main screen with the orange cat at a laptop, a focus timer, and a cosy room full of cats and decorations">
-						<figcaption>Your study room — focus alongside your cats.</figcaption>
+						<figcaption class="lang-en">Your study room — focus alongside your cats.</figcaption>
+						<figcaption class="lang-zh">你的学习房间——和你的猫咪们一起专注。</figcaption>
 					</figure>
 					<figure>
 						<img src="images/cat-album.png" alt="Cat Album screen showing discovered cats with visit counts">
-						<figcaption>Cat Album — every cat that's visited, with visit counts.</figcaption>
+						<figcaption class="lang-en">Cat Album — every cat that's visited, with visit counts.</figcaption>
+						<figcaption class="lang-zh">猫咪图鉴——记录每只来访过的猫咪和它们的造访次数。</figcaption>
 					</figure>
 					<figure>
 						<img src="images/statistics.png" alt="Statistics screen with an activity breakdown pie chart and weekly bar chart">
-						<figcaption>Statistics — focus time and session history.</figcaption>
+						<figcaption class="lang-en">Statistics — focus time and session history.</figcaption>
+						<figcaption class="lang-zh">统计——专注时长与会话记录。</figcaption>
 					</figure>
 					<figure>
 						<img src="images/your-data.png" alt="Your Data screen with personalised energy recommendations from Apple Watch health data">
-						<figcaption>Your Data — personalised suggestions from your Apple Watch.</figcaption>
+						<figcaption class="lang-en">Your Data — personalised suggestions from your Apple Watch.</figcaption>
+						<figcaption class="lang-zh">你的数据——来自 Apple Watch 的个性化建议。</figcaption>
 					</figure>
 				</div>
 
-				<h3>Privacy</h3>
-				<p>Purrductivity stores all of your data — timer state, tuna count, items, photos, discovered cats, and session history — <strong>locally on your device</strong>. Nothing is sent to any server, and there are no third-party trackers or ads. If you opt in to HealthKit, the app reads heart rate variability and sleep data only on-device to power the Body &amp; Focus view; this data never leaves your phone.</p>
+				<h3 class="lang-en">Privacy</h3>
+				<h3 class="lang-zh">隐私</h3>
+				<p class="lang-en">Purrductivity stores all of your data — timer state, tuna count, items, photos, discovered cats, and session history — <strong>locally on your device</strong>. Nothing is sent to any server, and there are no third-party trackers or ads. If you opt in to HealthKit, the app reads heart rate variability and sleep data only on-device to power the Body &amp; Focus view; this data never leaves your phone.</p>
+				<p class="lang-zh"><strong>所有数据都只保存在你的设备本地。</strong>「专注了喵」会将计时器状态、小鱼干数量、物品、照片、发现的猫咪和会话记录全部存储在本地，不会发送到任何服务器，也没有任何第三方追踪器或广告。如果你选择开启 HealthKit，应用仅在本地读取心率变异性和睡眠数据来支持「身体与专注」视图；这些数据永远不会离开你的手机。</p>
 
 				<div class="support-box">
-					<h3>Support</h3>
-					<p>Hit a bug, want to request a feature, or just want to say hi to the developer? Send me a message:</p>
+					<h3 class="lang-en">Support</h3>
+					<h3 class="lang-zh">支持</h3>
+					<p class="lang-en">Hit a bug, want to request a feature, or just want to say hi to the developer? Send me a message:</p>
+					<p class="lang-zh">遇到了 bug、想提建议，或者只是想跟开发者打个招呼？给我发条消息吧：</p>
 
 					<form class="support-form" action="https://formsubmit.co/rengel.hanis@gmail.com" method="POST" enctype="multipart/form-data">
 						<!-- FormSubmit configuration -->
@@ -236,35 +300,59 @@
 						<input type="text" name="_honey" style="display:none">
 
 						<div>
-							<label for="support-name">Name <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional)</span></label>
-							<input type="text" id="support-name" name="name" placeholder="Your name">
+							<label for="support-name">
+								<span class="lang-en">Name <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional)</span></span>
+								<span class="lang-zh">姓名 <span style="font-weight: 400; color: rgba(255,255,255,0.6);">（可选）</span></span>
+							</label>
+							<input type="text" id="support-name" name="name" placeholder="Your name" data-en-ph="Your name" data-zh-ph="你的名字">
 						</div>
 						<div>
-							<label for="support-email">Email <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional, only if you'd like a reply)</span></label>
-							<input type="email" id="support-email" name="email" placeholder="you@example.com">
+							<label for="support-email">
+								<span class="lang-en">Email <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional, only if you'd like a reply)</span></span>
+								<span class="lang-zh">邮箱 <span style="font-weight: 400; color: rgba(255,255,255,0.6);">（可选，如希望收到回复）</span></span>
+							</label>
+							<input type="email" id="support-email" name="email" placeholder="you@example.com" data-en-ph="you@example.com" data-zh-ph="you@example.com">
 						</div>
 						<div>
-							<label for="support-os">iPhone or Apple Watch OS</label>
-							<input type="text" id="support-os" name="os" placeholder="e.g. iOS 18.4 or watchOS 11.3">
+							<label for="support-os">
+								<span class="lang-en">iPhone or Apple Watch OS</span>
+								<span class="lang-zh">iPhone 或 Apple Watch 系统版本</span>
+							</label>
+							<input type="text" id="support-os" name="os" placeholder="e.g. iOS 18.4 or watchOS 11.3" data-en-ph="e.g. iOS 18.4 or watchOS 11.3" data-zh-ph="例如 iOS 18.4 或 watchOS 11.3">
 						</div>
 						<div>
-							<label for="support-message">What were you doing and what went wrong?</label>
-							<textarea id="support-message" name="message" placeholder="A short description of what happened." required></textarea>
+							<label for="support-message">
+								<span class="lang-en">What were you doing and what went wrong?</span>
+								<span class="lang-zh">你当时在做什么？发生了什么问题？</span>
+							</label>
+							<textarea id="support-message" name="message" placeholder="A short description of what happened." required data-en-ph="A short description of what happened." data-zh-ph="简单描述一下发生了什么。"></textarea>
 						</div>
 						<div>
-							<label for="support-screenshots">Screenshots <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional)</span></label>
+							<label for="support-screenshots">
+								<span class="lang-en">Screenshots <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional)</span></span>
+								<span class="lang-zh">截图 <span style="font-weight: 400; color: rgba(255,255,255,0.6);">（可选）</span></span>
+							</label>
 							<input type="file" id="support-screenshots" name="attachment" accept="image/*" multiple>
 						</div>
-						<button type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+						<button type="submit">
+							<i class="fa-solid fa-paper-plane"></i>
+							<span class="lang-en">Send</span>
+							<span class="lang-zh">发送</span>
+						</button>
 					</form>
 
-					<p class="support-fallback">Prefer email? Reach me directly at <a href="mailto:sinah_legner@hotmail.com?subject=Purrductivity%20Support">sinah_legner@hotmail.com</a>.</p>
+					<p class="support-fallback lang-en">Prefer email? Reach me directly at <a href="mailto:sinah_legner@hotmail.com?subject=Purrductivity%20Support">sinah_legner@hotmail.com</a>.</p>
+					<p class="support-fallback lang-zh">更喜欢用邮件？可以直接联系 <a href="mailto:sinah_legner@hotmail.com?subject=Purrductivity%20Support">sinah_legner@hotmail.com</a>。</p>
 				</div>
 
-				<h3>Frequently asked questions</h3>
-				<p><strong>1. Can I switch off the notification when I leave the app?</strong> Yes, you can turn off reminders in the menu.</p>
-				<p><strong>2. Can I add or modify activities?</strong> Yes — go to Statistics in the menu and pull down to the bottom. You can add, delete, or rename activities from there.</p>
-				<p><strong>3. Can I rename the cats?</strong> Yes — tap a cat's head icon in the Cat Album to rename it.</p>
+				<h3 class="lang-en">Frequently asked questions</h3>
+				<h3 class="lang-zh">常见问题</h3>
+				<p class="lang-en"><strong>1. Can I switch off the notification when I leave the app?</strong> Yes, you can turn off reminders in the menu.</p>
+				<p class="lang-zh"><strong>1. 我可以关闭离开应用时的通知吗？</strong>可以的，你可以在菜单中关闭提醒。</p>
+				<p class="lang-en"><strong>2. Can I add or modify activities?</strong> Yes — go to Statistics in the menu and pull down to the bottom. You can add, delete, or rename activities from there.</p>
+				<p class="lang-zh"><strong>2. 我可以添加或修改活动吗？</strong>可以的——进入菜单中的「统计」，下拉到页面底部，就可以添加、删除或重命名活动了。</p>
+				<p class="lang-en"><strong>3. Can I rename the cats?</strong> Yes — tap a cat's head icon in the Cat Album to rename it.</p>
+				<p class="lang-zh"><strong>3. 我可以给猫咪改名字吗？</strong>可以的——在猫咪图鉴中点击猫咪的头像即可改名。</p>
 
 			</div>
 		</div>
@@ -299,6 +387,23 @@
 			</div>
 		</footer>
 	</section>
+
+	<script>
+		// Language toggle
+		document.querySelectorAll('.lang-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				const lang = btn.dataset.lang;
+				document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+				btn.classList.add('active');
+				document.body.classList.toggle('show-zh', lang === 'zh');
+				document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+				// Swap form placeholders
+				document.querySelectorAll('[data-' + lang + '-ph]').forEach(el => {
+					el.placeholder = el.dataset[lang + 'Ph'];
+				});
+			});
+		});
+	</script>
 
 	<script>
 		// Prevent image credit from overlapping footer
