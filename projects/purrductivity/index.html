@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- SEO Meta Tags -->
+	<meta name="description" content="Purrductivity is a cozy focus app where you study alongside an orange cat and slowly build a space that attracts even more cat companions.">
+	<meta name="keywords" content="Purrductivity, study cat, focus timer, Pomodoro, iOS app, Apple Watch app, cat collection, productivity">
+	<meta name="author" content="Sinah Legner">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://slegner.co.uk/projects/purrductivity/">
+
+	<!-- Open Graph / Social Media -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://slegner.co.uk/projects/purrductivity/">
+	<meta property="og:title" content="Purrductivity | Sinah Legner">
+	<meta property="og:description" content="A cozy focus app where you study alongside an orange cat and slowly build a space that attracts even more cat companions.">
+	<meta property="og:image" content="https://slegner.co.uk/projects/purrductivity/images/app-icon.png">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@400,600&display=swap" rel="stylesheet">
+
+	<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+	<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+	<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript>
+
+    <link rel="stylesheet" href="../../styles.css">
+    <title>Purrductivity | Sinah Legner</title>
+
+	<style>
+		.blog-content {
+			max-width: 1200px;
+		}
+		.app-hero {
+			display: flex;
+			align-items: center;
+			gap: 25px;
+			margin-bottom: 30px;
+			flex-wrap: wrap;
+		}
+		.app-hero img.app-icon {
+			width: 120px;
+			height: 120px;
+			border-radius: 26px;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+		}
+		.app-hero .app-hero-text h1 {
+			margin-bottom: 6px;
+		}
+		.app-hero .app-tagline {
+			font-size: 18px;
+			color: rgba(255, 255, 255, 0.85);
+			margin: 0;
+			font-style: italic;
+		}
+		.screenshot-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: 20px;
+			margin: 25px 0 35px;
+		}
+		.screenshot-grid figure {
+			margin: 0;
+			background-color: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 10px;
+			padding: 12px;
+			text-align: center;
+		}
+		.screenshot-grid img {
+			width: 100%;
+			height: auto;
+			border-radius: 6px;
+			display: block;
+		}
+		.screenshot-grid figcaption {
+			font-size: 14px;
+			color: rgba(255, 255, 255, 0.8);
+			margin-top: 10px;
+		}
+		.support-box {
+			background-color: rgba(30, 30, 75, 0.94);
+			border: 2px solid rgba(110, 120, 220, 0.4);
+			border-radius: 8px;
+			padding: 20px 25px;
+			margin: 25px 0;
+		}
+		.support-box h3 {
+			margin-top: 0 !important;
+		}
+		.support-box a {
+			color: rgba(120, 200, 255, 1);
+			text-decoration: none;
+		}
+		.support-box a:hover {
+			text-decoration: underline;
+		}
+		.support-form {
+			display: grid;
+			gap: 14px;
+			margin-top: 10px;
+		}
+		.support-form label {
+			display: block;
+			font-size: 14px;
+			color: rgba(255, 255, 255, 0.85);
+			margin-bottom: 6px;
+			font-weight: 500;
+		}
+		.support-form input,
+		.support-form textarea {
+			width: 100%;
+			padding: 10px 12px;
+			background-color: rgba(255, 255, 255, 0.18);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 6px;
+			color: #ffffff;
+			font-family: inherit;
+			font-size: 15px;
+			box-sizing: border-box;
+			transition: border-color 0.2s ease, background-color 0.2s ease;
+		}
+		.support-form input:focus,
+		.support-form textarea:focus {
+			outline: none;
+			border-color: rgba(0, 123, 255, 0.7);
+			background-color: rgba(255, 255, 255, 0.12);
+		}
+		.support-form textarea {
+			min-height: 140px;
+			resize: vertical;
+		}
+		.support-form button {
+			justify-self: start;
+			padding: 12px 28px;
+			background-color: rgba(0, 123, 255, 0.8);
+			color: white;
+			border: none;
+			border-radius: 6px;
+			font-size: 16px;
+			font-weight: 500;
+			font-family: inherit;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
+		.support-form button:hover {
+			background-color: rgba(0, 123, 255, 1);
+		}
+		.support-fallback {
+			font-size: 13px;
+			color: rgba(255, 255, 255, 0.6);
+			margin-top: 14px;
+		}
+	</style>
+</head>
+<body>
+
+	<!-- Top Navigation Bar -->
+	<nav class="top-nav">
+		<div class="nav-container">
+			<div class="nav-brand">Sinah Legner | PhD Student</div>
+			<div class="nav-links">
+				<a href="/">Home</a>
+				<a href="/cv/">CV</a>
+				<a href="/talks/">Talks</a>
+				<a href="/projects/">Projects</a>
+				<a href="/hobbies/">Hobbies</a>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Purrductivity Page -->
+	<section class="projects-page">
+		<div class="container">
+			<div class="blog-content">
+
+				<div class="app-hero">
+					<img src="images/app-icon.png" alt="Purrductivity app icon" class="app-icon">
+					<div class="app-hero-text">
+						<h1>Purrductivity</h1>
+						<p class="app-tagline">Start small. Stay focused. Let the cats come to you.</p>
+					</div>
+				</div>
+
+				<p>Purrductivity is a cozy focus app where you study alongside an orange cat, and slowly build a space that attracts even more cat companions.</p>
+
+				<p><strong>In collaboration with</strong> <a href="https://run2achieve.info/" target="_blank" rel="noopener noreferrer" style="color: rgba(120, 200, 255, 1); text-decoration: none;">Run2Achieve Ltd <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px;"></i></a>.</p>
+
+				<h3>How it works</h3>
+				<ul>
+					<li>Focus for 5 minutes to earn a tuna biscuit</li>
+					<li>Use tuna biscuits to buy decorations for your study room</li>
+					<li>Every 25 minutes, a cat may join your session</li>
+					<li>Different decorations attract different cats</li>
+				</ul>
+
+				<p>Track your progress with simple stats on focus time and session history, and get personalized suggestions based on your health data from your Apple Watch.</p>
+
+				<p><em>Start small. Stay focused. Let the cats come to you.</em></p>
+
+				<h3>Screenshots</h3>
+				<div class="screenshot-grid">
+					<figure>
+						<img src="images/home.png" alt="Main screen with the orange cat at a laptop, a focus timer, and a cosy room full of cats and decorations">
+						<figcaption>Your study room — focus alongside your cats.</figcaption>
+					</figure>
+					<figure>
+						<img src="images/cat-album.png" alt="Cat Album screen showing discovered cats with visit counts">
+						<figcaption>Cat Album — every cat that's visited, with visit counts.</figcaption>
+					</figure>
+					<figure>
+						<img src="images/statistics.png" alt="Statistics screen with an activity breakdown pie chart and weekly bar chart">
+						<figcaption>Statistics — focus time and session history.</figcaption>
+					</figure>
+					<figure>
+						<img src="images/your-data.png" alt="Your Data screen with personalised energy recommendations from Apple Watch health data">
+						<figcaption>Your Data — personalised suggestions from your Apple Watch.</figcaption>
+					</figure>
+				</div>
+
+				<h3>Privacy</h3>
+				<p>Purrductivity stores all of your data — timer state, tuna count, items, photos, discovered cats, and session history — <strong>locally on your device</strong>. Nothing is sent to any server, and there are no third-party trackers or ads. If you opt in to HealthKit, the app reads heart rate variability and sleep data only on-device to power the Body &amp; Focus view; this data never leaves your phone.</p>
+
+				<div class="support-box">
+					<h3>Support</h3>
+					<p>Hit a bug, want to request a feature, or just want to say hi to the cats? Send me a message:</p>
+
+					<form class="support-form" action="https://formsubmit.co/sinah_legner@hotmail.com" method="POST" enctype="multipart/form-data">
+						<!-- FormSubmit configuration -->
+						<input type="hidden" name="_subject" value="Purrductivity Support">
+						<input type="hidden" name="_template" value="table">
+						<input type="hidden" name="_captcha" value="true">
+						<input type="text" name="_honey" style="display:none">
+
+						<div>
+							<label for="support-name">Name <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional)</span></label>
+							<input type="text" id="support-name" name="name" placeholder="Your name">
+						</div>
+						<div>
+							<label for="support-email">Email</label>
+							<input type="email" id="support-email" name="email" placeholder="you@example.com" required>
+						</div>
+						<div>
+							<label for="support-os">iPhone or Apple Watch OS</label>
+							<input type="text" id="support-os" name="os" placeholder="e.g. iOS 18.4 or watchOS 11.3">
+						</div>
+						<div>
+							<label for="support-message">What were you doing and what went wrong?</label>
+							<textarea id="support-message" name="message" placeholder="A short description of what happened." required></textarea>
+						</div>
+						<div>
+							<label for="support-screenshots">Screenshots <span style="font-weight: 400; color: rgba(255,255,255,0.6);">(optional)</span></label>
+							<input type="file" id="support-screenshots" name="attachment" accept="image/*" multiple>
+						</div>
+						<button type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+					</form>
+
+					<p class="support-fallback">Prefer email? Reach me directly at <a href="mailto:sinah_legner@hotmail.com?subject=Purrductivity%20Support">sinah_legner@hotmail.com</a>.</p>
+				</div>
+
+				<h3>Frequently asked questions</h3>
+				<p><strong>1. Can I switch off the notification when I leave the app?</strong> Yes, you can turn off reminders in the menu.</p>
+				<p><strong>2. Can I add or modify activities?</strong> Yes — go to Statistics in the menu and pull down to the bottom. You can add, delete, or rename activities from there.</p>
+				<p><strong>3. Can I rename the cats?</strong> Yes — tap a cat's head icon in the Cat Album to rename it.</p>
+
+			</div>
+		</div>
+
+		<div class="image-credit">
+			<a href="https://en.wikipedia.org/wiki/North_America_Nebula" target="_blank" rel="noopener noreferrer">North America Nebula, NGC 7000</a>, taken by <a href="https://www.dwarflab.com/" target="_blank" rel="noopener noreferrer">Dwarf3</a>, 9th November
+		</div>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<div class="footer-container">
+				<div class="footer-section">
+					<p><i class="fa-solid fa-envelope"></i> <a href="mailto:sl2091@cam.ac.uk">sl2091@cam.ac.uk</a></p>
+					<p><i class="fa-solid fa-building-columns"></i> Cavendish Laboratory, University of Cambridge</p>
+				</div>
+				<div class="footer-section">
+					<div class="footer-links">
+						<a href="https://github.com/slegner" target="_blank" rel="noopener noreferrer">
+							<i class="fa-brands fa-github"></i> GitHub
+						</a>
+						<a href="https://orcid.org/0009-0000-4019-5314" target="_blank" rel="noopener noreferrer">
+							<i class="fa-brands fa-orcid"></i> ORCID
+						</a>
+						<a href="https://inspirehep.net/authors/2955073" target="_blank" rel="noopener noreferrer">
+							<i class="fa-solid fa-graduation-cap"></i> INSPIRE-HEP
+						</a>
+						<a href="https://arxiv.org/search/astro-ph?searchtype=author&query=Legner,+S" target="_blank" rel="noopener noreferrer">
+							<i class="fa-solid fa-file-text"></i> arXiv
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</section>
+
+	<script>
+		// Prevent image credit from overlapping footer
+		function adjustImageCredit() {
+			const credit = document.querySelector('.image-credit');
+			const footer = document.querySelector('.footer');
+
+			if (credit && footer) {
+				const footerRect = footer.getBoundingClientRect();
+				const windowHeight = window.innerHeight;
+
+				if (footerRect.top < windowHeight) {
+					const distanceFromBottom = windowHeight - footerRect.top + 10;
+					credit.style.bottom = distanceFromBottom + 'px';
+				} else {
+					credit.style.bottom = '10px';
+				}
+			}
+		}
+
+		window.addEventListener('scroll', adjustImageCredit);
+		window.addEventListener('resize', adjustImageCredit);
+		adjustImageCredit();
+	</script>
+
+</body>
+</html>
