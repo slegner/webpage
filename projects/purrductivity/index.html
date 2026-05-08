@@ -185,6 +185,20 @@
 		.lang-zh { display: none; }
 		body.show-zh .lang-en { display: none; }
 		body.show-zh .lang-zh { display: revert; }
+
+		/* Privacy section — narrower reading column + warm-gold links */
+		.privacy-block {
+			max-width: 1000px;
+		}
+		.privacy-block a {
+			color: #f0c96a;
+			border-bottom: 1px dotted rgba(240, 201, 106, 0.4);
+			transition: border-color 0.2s ease;
+		}
+		.privacy-block a:hover {
+			color: #f5d98a;
+			border-bottom-color: rgba(245, 217, 138, 0.8);
+		}
 	</style>
 </head>
 <body>
@@ -281,10 +295,14 @@
 					</figure>
 				</div>
 
-				<h3 class="lang-en">Privacy</h3>
-				<h3 class="lang-zh">隐私</h3>
-				<p class="lang-en">Purrductivity stores all of your data — timer state, tuna count, items, photos, discovered cats, and session history — <strong>locally on your device</strong>. Nothing is sent to any server, and there are no third-party trackers or ads. If you opt in to HealthKit, the app reads heart rate variability and sleep data only on-device to power the Body &amp; Focus view; this data never leaves your phone.</p>
-				<p class="lang-zh"><strong>所有数据都只保存在你的设备本地。</strong>「专注了喵」会将计时器状态、小鱼干数量、物品、照片、发现的猫咪和会话记录全部存储在本地，不会发送到任何服务器，也没有任何第三方追踪器或广告。如果你选择开启 HealthKit，应用仅在本地读取心率变异性和睡眠数据来支持「身体与专注」视图；这些数据永远不会离开你的手机。</p>
+				<div class="privacy-block">
+					<h3 class="lang-en">Privacy</h3>
+					<h3 class="lang-zh">隐私</h3>
+					<p class="lang-en">Purrductivity stores all of your data — timer state, tuna count, items, photos, discovered cats, and session history — <strong>locally on your device</strong>. Nothing is sent to any server, and there are no third-party trackers or ads. If you opt in to HealthKit, the app reads heart rate variability and sleep data only on-device to support the Body &amp; Focus dashboard; this data never leaves your phone.</p>
+					<p class="lang-zh"><strong>所有数据都只保存在你的设备本地。</strong>「专注了喵」会将计时器状态、小鱼干数量、物品、照片、发现的猫咪和会话记录全部存储在本地，不会发送到任何服务器，也没有任何第三方追踪器或广告。如果你选择开启 HealthKit，应用仅在本地读取心率变异性和睡眠数据来支持「身体与专注」面板；这些数据永远不会离开你的手机。</p>
+					<p class="lang-en">Read the full <a href="../../privacy.html">Privacy Policy</a> · <a href="../../privacy-zh.html">隐私政策（中文）</a></p>
+					<p class="lang-zh">阅读完整<a href="../../privacy-zh.html">隐私政策</a> · <a href="../../privacy.html">Privacy Policy (English)</a></p>
+				</div>
 
 				<div class="support-box">
 					<h3 class="lang-en">Support</h3>
