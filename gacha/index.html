@@ -37,6 +37,7 @@
 			color: var(--ink);
 			line-height: 1.4;
 			min-height: 100vh;
+			min-height: 100dvh;
 			display: flex;
 			justify-content: center;
 		}
@@ -49,6 +50,7 @@
 			max-width: 460px;
 			background: var(--cream);
 			min-height: 100vh;
+			min-height: 100dvh;
 			position: relative;
 			padding-bottom: 108px;
 			box-shadow: 0 0 40px rgba(120, 90, 40, .22);
@@ -58,6 +60,7 @@
 		/* ---------- hero ---------- */
 		.hero {
 			position: relative;
+			min-height: 196px;
 			padding: 12px 14px 14px;
 			background: linear-gradient(180deg, #9fdcf5 0%, #c9ecf7 55%, #ffe9a8 100%);
 			overflow: hidden;
@@ -215,8 +218,13 @@
 			background: #fff; display: flex; align-items: center; justify-content: center;
 			padding: 8px 6px 2px; gap: 3px;
 		}
-		.pcard .pic img { width: 100%; height: auto; max-height: 104px; object-fit: contain; }
-		.grid.two .pcard .pic img { max-width: 48%; }
+		.pcard .pic img {
+			width: 100%; height: auto; aspect-ratio: 1 / 1;
+			max-height: 104px; object-fit: contain;
+		}
+		.grid.two   .pcard .pic { min-height: 112px; }
+		.grid.two   .pcard .pic img { max-width: 48%; }
+		.grid.three .pcard .pic { min-height: 82px; }
 		.grid.three .pcard .pic img { max-height: 74px; }
 		.pcard .cap {
 			background: var(--yellow-lt);
@@ -343,7 +351,7 @@
 			display: flex; align-items: center; gap: 9px;
 			padding: 7px 4px; border-bottom: 1px solid #f0e6d2; font-size: .74rem;
 		}
-		.log-item img { width: 34px; height: 34px; flex: none; border-radius: 6px; object-fit: contain; }
+		.log-item img { width: 34px; height: 34px; flex: none; border-radius: 6px; object-fit: contain; aspect-ratio: 1/1; }
 		.log-item .who { flex: 1; line-height: 1.4; }
 		.log-item .who b { color: var(--red); }
 		.log-item .val { font-variant-numeric: tabular-nums; color: #8a7466; font-size: .7rem; text-align: right; }
@@ -353,7 +361,7 @@
 			background: #fff; border-radius: 10px; box-shadow: var(--card-shadow);
 			padding: 7px 4px; text-align: center; position: relative;
 		}
-		.bag-item img { width: 100%; max-width: 58px; height: auto; object-fit: contain; }
+		.bag-item img { width: 100%; max-width: 58px; height: auto; aspect-ratio: 1/1; object-fit: contain; }
 		.bag-item .n { font-size: .62rem; line-height: 1.3; margin-top: 2px; }
 		.bag-item .m { font-size: .56rem; color: #a08a5e; }
 		.bag-item .c {
@@ -404,7 +412,7 @@
 		}
 		.face.back { background: repeating-linear-gradient(45deg, #ffe066 0 9px, #ffd400 9px 18px); font-size: 1.6rem; }
 		.face.front { transform: rotateY(180deg); background: #fff; padding: 5px; }
-		.face.front img { width: 100%; max-width: 62px; height: auto; object-fit: contain; }
+		.face.front img { width: 100%; max-width: 62px; height: auto; aspect-ratio: 1/1; object-fit: contain; }
 		.face.front .rk {
 			position: absolute; top: 4px; left: 4px; background: var(--red); color: #fff;
 			font-size: .6rem; font-weight: 900; padding: 1px 6px; border-radius: 999px;
@@ -431,6 +439,54 @@
 		.result-head {
 			background: var(--yellow); padding: 14px; text-align: center;
 		}
+		.result-head .sr { font-size: .74rem; font-weight: 700; color: #8a6a1a; }
+		.result-head .luck {
+			height: 12px; background: rgba(255,255,255,.7); border-radius: 999px;
+			overflow: hidden; margin: 8px 14px 5px;
+		}
+		.result-head .luck span {
+			display: block; height: 100%; width: 0; border-radius: 999px;
+			background: linear-gradient(90deg, #ff9a8b, #ffd166, #8bc34a);
+			transition: width .8s cubic-bezier(.2,.9,.3,1);
+		}
+		.result-head .luckcap { font-size: .7rem; font-weight: 700; color: #7a6320; }
+
+		.bigline {
+			display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+			margin-bottom: 12px; text-align: center;
+		}
+		.bigline > div {
+			background: #fff; border-radius: 13px; padding: 9px 6px;
+			box-shadow: var(--card-shadow);
+		}
+		.bigline .k { display: block; font-size: .66rem; color: var(--ink-lt); }
+		.bigline b { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+		.bigline b.spend { color: var(--red); }
+		.bigline .u { font-size: .7rem; color: var(--ink-lt); margin-left: 2px; }
+
+		.haul-head {
+			margin-top: 15px; font-size: .82rem; font-weight: 800; color: #5b4a42;
+			display: flex; justify-content: space-between; align-items: baseline;
+		}
+		.haul-head span { font-size: .7rem; font-weight: 700; color: var(--ink-lt); }
+		.haul {
+			margin-top: 8px;
+			display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px;
+			max-height: 240px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+			background: #fdf7ea; border-radius: 12px; padding: 8px;
+		}
+		.haul-item {
+			background: #fff; border-radius: 9px; padding: 5px 3px 4px;
+			text-align: center; position: relative; box-shadow: 0 1px 3px rgba(160,120,60,.18);
+		}
+		.haul-item.rare { box-shadow: 0 0 0 2px var(--yellow), 0 2px 6px rgba(200,150,20,.4); }
+		.haul-item img { width: 100%; height: auto; aspect-ratio: 1/1; object-fit: contain; }
+		.haul-item .c {
+			position: absolute; top: 2px; right: 2px; background: var(--red); color: #fff;
+			font-size: .56rem; font-weight: 800; border-radius: 999px; padding: 0 4px;
+		}
+		.haul-item .n { font-size: .54rem; line-height: 1.25; color: #6b5348; margin-top: 1px; }
+		.haul-item .v { font-size: .52rem; color: #a08a5e; }
 		.result-head .ttl { font-size: 1.1rem; font-weight: 900; }
 		.result-head .em { font-size: 2.2rem; margin-top: 4px; }
 		.result-head .rk { font-size: 1rem; font-weight: 900; color: var(--red); }
@@ -671,7 +727,10 @@
 	                sleep: SLEEP, cookie: COOKIE, tissue: TISSUE };
 
 	function imgTag(a, cls) {
-		return '<img src="' + a.f + '" alt="' + a.n + '" loading="lazy"' + (cls ? ' class="' + cls + '"' : '') + '>';
+		// width/height are the real pixel size of the crops — they reserve the
+		// box before the file arrives, so the page never jumps while loading
+		return '<img src="' + a.f + '" alt="' + a.n + '" width="220" height="220" ' +
+		       'loading="lazy" decoding="async"' + (cls ? ' class="' + cls + '"' : '') + '>';
 	}
 
 	/* =========================================================
@@ -818,6 +877,8 @@
 	let lifetime = loadLifetime();
 	let busy = false;
 	let lastDrawN = 1;
+	let pendingBuild = false;
+	let roomNote = "";
 
 	function loadLifetime() {
 		try {
@@ -854,6 +915,23 @@
 
 	// A brand-new round = a brand-new series: different theme, prizes,
 	// counts and prices every single time.
+	// A freshly opened room is often NOT untouched — other people have been
+	// drawing from it. Sometimes the big prizes are already gone; sometimes
+	// the tissues have been cleared out and the good stuff is still sitting there.
+	function preDeplete(b, frac, mode) {
+		const n = Math.min(b.tickets.length - 3, Math.round(b.tickets.length * frac));
+		if (n <= 0) return;
+		const bias = t => mode === "rareGone" ? (t.rare ? -0.55 : t.junk ? 0.25 : 0)
+		            : mode === "junkGone" ? (t.junk ? -0.55 : t.rare ? 0.35 : 0)
+		            : 0;
+		const keyed = b.tickets.map(t => ({ t: t, k: Math.random() + bias(t) }));
+		keyed.sort((x, y) => x.k - y.k);
+		keyed.slice(0, n).forEach(x => { b.left[x.t.rank] -= 1; });
+		b.tickets = shuffle(keyed.slice(n).map(x => x.t));
+		b.drawn += n;
+		if (b.drawn >= b.tokutenAt) b.tokutenGone = true;
+	}
+
 	function newRound(bump) {
 		if (bump) { round += 1; lifetime.rounds = (lifetime.rounds || 0) + 1; saveLifetime(); }
 		series = makeSeries();
@@ -861,8 +939,22 @@
 		boxes = [];
 		for (let i = 0; i < BOXES_PER_ROUND; i++) boxes.push(makeBox());
 		cur = 0;
+
+		if (Math.random() < 0.55) {
+			const mode = pick(["even", "even", "rareGone", "rareGone", "rareGone", "junkGone", "junkGone"]);
+			preDeplete(boxes[0], rnd(0.25, 0.88), mode);
+			for (let i = 1; i < BOXES_PER_ROUND; i++)
+				if (Math.random() < 0.6) preDeplete(boxes[i], rnd(0.05, 0.5), mode);
+			roomNote = mode === "rareGone" ? "这箱被抽过了，大奖没剩几个"
+			         : mode === "junkGone" ? "这箱纸巾快被清光了，好东西还在里面"
+			         : "这箱已经有人抽了一阵子了";
+		} else {
+			roomNote = "全新的一箱，你是第一个 🎉";
+		}
 		const t = document.getElementById("series-title");
 		if (t) t.innerHTML = series.title + ' <small>第' + series.wave + '弹</small>';
+		const strip = document.getElementById("rival-strip");
+		if (strip && roomNote) strip.textContent = roomNote;
 		const hero = document.getElementById("hero-plush");
 		if (hero) {
 			const bn = pick(BANNERS);
@@ -897,12 +989,14 @@
 		];
 	}
 
-	function renderPrizes() {
+	// Full rebuild — only when the series itself changes. Rebuilding this on
+	// every rival draw re-created every <img> and made the page flicker.
+	function buildPrizes() {
 		const b = box();
 
-		$("grid-special").innerHTML = specialCards().map(o => `
-			<div class="pcard${o.gone ? " gone" : ""}">
-				<span class="count">${o.gone ? "0/1" : "1/1"}</span>
+		$("grid-special").innerHTML = specialCards().map((o, i) => `
+			<div class="pcard" data-sp="${i}">
+				<span class="count">1/1</span>
 				<span class="ribbon">预售</span>
 				<div class="pic">${imgTag(o.it.assets[0])}</div>
 				<div class="cap">
@@ -913,24 +1007,21 @@
 			</div>`).join("");
 
 		const main = series.tiers.slice(0, series.tiers.length - 1);
-		$("grid-main").innerHTML = main.map(t => {
-			const rem = b.left[t.rank];
-			return `<div class="pcard${rem === 0 ? " gone" : ""}">
-				<span class="count">${rem}/${t.count}</span>
+		$("grid-main").innerHTML = main.map(t => `
+			<div class="pcard" data-rank="${t.rank}">
+				<span class="count">${b.left[t.rank]}/${t.count}</span>
 				<span class="ribbon">预售</span>
 				<div class="pic">${imgTag(t.assets[0])}</div>
 				<div class="cap">
 					<span class="rank">${t.rank}赏</span> ${t.name}
 					<span class="money">市场价 ${moneyS(t.value)}</span>
 				</div>
-			</div>`;
-		}).join("");
+			</div>`).join("");
 
 		const j = series.tiers[series.tiers.length - 1];
-		const jr = b.left[j.rank];
-		$("card-junk").className = "pcard" + (jr === 0 ? " gone" : "");
+		$("card-junk").dataset.rank = j.rank;
 		$("card-junk").innerHTML =
-			`<span class="count">${jr}/${j.count}</span>
+			`<span class="count">${b.left[j.rank]}/${j.count}</span>
 			 <span class="ribbon">预售</span>
 			 <div class="pic">${imgTag(j.assets[0])}</div>
 			 <div class="cap">
@@ -938,6 +1029,34 @@
 				<span class="note">安慰奖，箱子里最多的东西</span>
 				<span class="money">市场价 ${moneyS(j.value)}</span>
 			 </div>`;
+
+		refreshPrizes();
+	}
+
+	// Cheap update — touches only the remaining-count text and the grey-out
+	// class, so nothing reflows and no image is ever re-fetched.
+	function refreshPrizes() {
+		const b = box();
+		const counts = {};
+		series.tiers.forEach(t => { counts[t.rank] = t.count; });
+
+		document.querySelectorAll("[data-rank]").forEach(card => {
+			const r = card.dataset.rank;
+			const rem = b.left[r];
+			const c = card.querySelector(".count");
+			const txt = rem + "/" + counts[r];
+			if (c.textContent !== txt) c.textContent = txt;
+			card.classList.toggle("gone", rem === 0);
+		});
+
+		const sp = [b.tokutenGone, b.lastGone];
+		document.querySelectorAll("[data-sp]").forEach(card => {
+			const g = sp[Number(card.dataset.sp)];
+			const c = card.querySelector(".count");
+			const txt = g ? "0/1" : "1/1";
+			if (c.textContent !== txt) c.textContent = txt;
+			card.classList.toggle("gone", g);
+		});
 	}
 
 	function renderNav() {
@@ -1027,11 +1146,11 @@
 		if (box().tickets.length === 0) {
 			let next = -1;
 			for (let i = 0; i < BOXES_PER_ROUND; i++) if (boxes[i].tickets.length > 0) { next = i; break; }
-			if (next >= 0) cur = next;
+			if (next >= 0) { cur = next; pendingBuild = true; }
 			else if (autoNext) {
 				newRound(true);
 				toast(null, "本场已抽空 —— 新系列「" + series.title + "」开箱了", false);
-				renderPrizes();
+				buildPrizes();
 			} else return null;
 		}
 		return pullFrom(cur, true);
@@ -1068,7 +1187,7 @@
 		saveLifetime();
 
 		showReveal(pulled);
-		renderPrizes();
+		if (pendingBuild) { pendingBuild = false; buildPrizes(); } else refreshPrizes();
 		renderNav();
 		renderStats();
 	}
@@ -1290,8 +1409,11 @@
 		const net = s.value - s.spent;
 		const r = rating(rate);
 
+		$("r-series").textContent = series.title + " 第" + series.wave + "弹 · 单抽 " + money(series.price);
 		$("r-em").textContent = r.em;
 		$("r-rank").textContent = r.name;
+		$("r-bigdraws").textContent = s.draws;
+		$("r-bigspent").textContent = money0(s.spent);
 		$("r-draws").textContent = s.draws + " 发";
 		$("r-spent").textContent = money(s.spent);
 		$("r-value").textContent = money0(s.value);
@@ -1299,6 +1421,24 @@
 		$("r-net").textContent = (net >= 0 ? "+" : "−") + money0(Math.abs(net));
 		$("r-net").style.color = net >= 0 ? "#6ba32f" : "#e8453c";
 		$("r-rate").textContent = (rate * 100).toFixed(1) + "%";
+		$("r-luckcap").textContent = "回本率 " + (rate * 100).toFixed(1) + "% · " + r.name;
+		$("r-luck").style.width = "0%";
+		setTimeout(() => { $("r-luck").style.width = Math.min(rate, 1.5) / 1.5 * 100 + "%"; }, 60);
+
+		// everything you actually walked away with
+		const order = { "特典": -2, LAST: -1 };
+		RANKS.forEach((rk, i) => { order[rk] = i; });
+		const items = Array.from(bag.values()).sort((a, b) =>
+			(order[a.rank] - order[b.rank]) || (b.value - a.value));
+		const total = items.reduce((a, b) => a + b.n, 0);
+		$("r-haulcount").textContent = total + " 件 · 市场价 " + money0(s.value);
+		$("r-haul").innerHTML = items.map(it => `
+			<div class="haul-item${it.rare ? " rare" : ""}">
+				${it.n > 1 ? `<span class="c">×${it.n}</span>` : ""}
+				${imgTag(it.asset)}
+				<div class="n">${it.rank} ${it.name}</div>
+				<div class="v">${moneyS(it.value * it.n)}</div>
+			</div>`).join("");
 
 		const markup = s.cost > 0 ? (s.spent / s.cost).toFixed(1) : "—";
 		const milk = Math.floor(s.spent / 18);
@@ -1322,7 +1462,7 @@
 		saveLifetime();
 		newRound(false);
 		$("scrim").classList.remove("open");
-		renderPrizes(); renderNav(); renderStats();
+		buildPrizes(); renderNav(); renderStats();
 	}
 
 	/* =========================================================
@@ -1361,7 +1501,7 @@
 		if (roundLeft() === 0) {
 			newRound(true);
 			toast(null, "本场已抽空 —— 新系列「" + series.title + "」开箱了", false);
-			renderPrizes(); renderNav();
+			buildPrizes(); renderNav();
 			return;
 		}
 
@@ -1390,7 +1530,7 @@
 			toast(rival, `<b>${rival.name}</b> 抽了 ${got.length} 发，中 ${top.rank}赏`, false);
 		}
 
-		renderPrizes();
+		refreshPrizes();
 		renderNav();
 	}
 
@@ -1410,8 +1550,8 @@
 	$("sheet-close").addEventListener("click", () => $("scrim").classList.remove("open"));
 	$("scrim").addEventListener("click", e => { if (e.target === $("scrim")) $("scrim").classList.remove("open"); });
 
-	$("prev-box").addEventListener("click", () => { if (cur > 0) { cur -= 1; renderPrizes(); renderNav(); } });
-	$("next-box").addEventListener("click", () => { if (cur < BOXES_PER_ROUND - 1) { cur += 1; renderPrizes(); renderNav(); } });
+	$("prev-box").addEventListener("click", () => { if (cur > 0) { cur -= 1; buildPrizes(); renderNav(); } });
+	$("next-box").addEventListener("click", () => { if (cur < BOXES_PER_ROUND - 1) { cur += 1; buildPrizes(); renderNav(); } });
 
 	$("rv-close").addEventListener("click", () => $("reveal").classList.remove("open"));
 	$("rv-again").addEventListener("click", () => { if (!busy) draw(lastDrawN); });
@@ -1426,7 +1566,7 @@
 		if (busy) return;
 		newRound(true);
 		toast(null, "换了一箱新的 —— 本场是「" + series.title + "」", false);
-		renderPrizes(); renderNav();
+		buildPrizes(); renderNav();
 	}
 	$("act-newround").addEventListener("click", freshRound);
 	$("tab-newround").addEventListener("click", freshRound);
@@ -1441,7 +1581,7 @@
 
 	// boot
 	newRound(false);
-	renderPrizes();
+	buildPrizes();
 	renderNav();
 	renderStats();
 })();
