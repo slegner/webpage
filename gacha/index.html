@@ -502,6 +502,14 @@
 		}
 		.fine { margin-top: 11px; font-size: .7rem; color: var(--ink-lt); line-height: 1.8; }
 		.result .dbtn { margin-top: 14px; width: 100%; }
+		.result-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+		.result-btns .dbtn { margin-top: 14px; }
+		.result-btns .dbtn .t { font-size: .88rem; }
+		.result-btns .dbtn .p { font-size: .62rem; font-weight: 600; }
+		.dbtn.ghost {
+			background: #fffaf0; box-shadow: 0 4px 0 #e0d2b4; border-color: #f0e3c8;
+		}
+		.dbtn.ghost .t { color: #8a6a1a; text-shadow: none; }
 
 		/* ---------- rival-player toasts ---------- */
 		.toasts {
@@ -646,7 +654,7 @@
 	<div class="reveal-cards" id="reveal-cards"></div>
 	<div class="reveal-note" id="reveal-note"></div>
 	<div class="reveal-btns">
-		<button class="dbtn" id="rv-again"><div class="t">再抽</div><div class="p" id="rv-again-p">¥19.00</div></button>
+		<button class="dbtn" id="rv-again"><div class="t">再抽 <b id="rv-again-n">1</b> 次</div><div class="p" id="rv-again-p">¥19.00</div></button>
 		<button class="dbtn" id="rv-close"><div class="t">收下</div><div class="p">放进赏袋</div></button>
 	</div>
 </div>
@@ -681,7 +689,10 @@
 			<div class="haul" id="r-haul"></div>
 
 			<div class="fine" id="r-fine"></div>
-			<button class="dbtn" id="r-close"><div class="t">继续抽</div></button>
+			<div class="result-btns">
+				<button class="dbtn" id="r-newrun"><div class="t">开始新的一轮</div><div class="p">战绩清零</div></button>
+				<button class="dbtn ghost" id="r-close"><div class="t">继续这一轮</div><div class="p">接着往上加</div></button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -887,7 +898,8 @@
 	let log = [];
 	let lifetime = loadLifetime();
 	let busy = false;
-	let lastDrawN = 1;
+	let lastDrawN = 1;   // size of the last draw, for the reveal note
+	let againN = 1;      // what 再抽 repeats — never the 全收 amount
 	let pendingBuild = false;
 	let roomNote = "";
 
@@ -900,6 +912,37 @@
 	}
 	function saveLifetime() {
 		try { localStorage.setItem(LS_KEY, JSON.stringify(lifetime)); } catch (e) {}
+	}
+
+	// The run in progress survives a refresh — the room is re-rolled but your
+	// draws, spend, bag and log carry over until you settle and choose to reset.
+	const RUN_KEY = "kuji-run-v1";
+	function saveRun() {
+		try {
+			localStorage.setItem(RUN_KEY, JSON.stringify({
+				session: session,
+				bag: Array.from(bag.entries()),
+				log: log.slice(0, 60).map(l => Object.assign({}, l, { t: l.t.getTime() }))
+			}));
+		} catch (e) {}
+	}
+	function loadRun() {
+		try {
+			const d = JSON.parse(localStorage.getItem(RUN_KEY) || "null");
+			if (!d || !d.session || typeof d.session.draws !== "number" || d.session.draws <= 0) return 0;
+			session = d.session;
+			bag = new Map(d.bag || []);
+			log = (d.log || []).map(l => Object.assign({}, l, { t: new Date(l.t) }));
+			return session.draws;
+		} catch (e) { return 0; }
+	}
+	function clearRun() { try { localStorage.removeItem(RUN_KEY); } catch (e) {} }
+
+	function resetRun() {
+		session = { draws: 0, spent: 0, value: 0, cost: 0, boxesCleared: 0, rare: 0, junk: 0 };
+		bag = new Map();
+		log = [];
+		clearRun();
 	}
 
 	function makeBox() {
@@ -1083,7 +1126,9 @@
 		$("p1").textContent = money(price);
 		$("p3").textContent = money(price * 3);
 		$("p5").textContent = money(price * 5);
-		$("rv-again-p").textContent = money(price * lastDrawN);
+		$("rv-again-n").textContent = againN;
+		$("rv-again-p").textContent = money(price * againN);
+		$("rv-again").disabled = busy || (roundLeft() === 0 && !autoNext);
 		$("points").textContent = Math.floor(session.spent / 10);
 
 		const dead = roundLeft() === 0 && !autoNext;
@@ -1167,10 +1212,11 @@
 		return pullFrom(cur, true);
 	}
 
-	function draw(n) {
+	function draw(n, viaAll) {
 		if (busy) return;
 		busy = true;
 		lastDrawN = n;
+		if (!viaAll) againN = n;
 
 		const pulled = [];
 		for (let i = 0; i < n; i++) {
@@ -1196,6 +1242,7 @@
 		});
 		if (log.length > 200) log.length = 200;
 		saveLifetime();
+		saveRun();
 
 		showReveal(pulled);
 		if (pendingBuild) { pendingBuild = false; buildPrizes(); } else refreshPrizes();
@@ -1466,9 +1513,7 @@
 	function wipe() {
 		if (!confirm("清空本场战绩、赏袋和生涯记录？（反正也没花钱）")) return;
 		round = 1;
-		session = { draws: 0, spent: 0, value: 0, cost: 0, boxesCleared: 0, rare: 0, junk: 0 };
-		bag = new Map();
-		log = [];
+		resetRun();
 		lifetime = { draws: 0, spent: 0, value: 0, cost: 0, rounds: 0 };
 		saveLifetime();
 		newRound(false);
@@ -1531,6 +1576,7 @@
 
 		got.forEach(it => log.unshift(Object.assign({}, it, { t: new Date(), by: rival.name })));
 		if (log.length > 200) log.length = 200;
+		if (session.draws > 0) saveRun();
 
 		const best = got.filter(g => g.rare).pop();
 		if (best) {
@@ -1557,7 +1603,7 @@
 	document.querySelectorAll("[data-draw]").forEach(el =>
 		el.addEventListener("click", () => draw(Number(el.dataset.draw))));
 
-	$("btn-allin").addEventListener("click", () => draw(box().tickets.length));
+	$("btn-allin").addEventListener("click", () => draw(box().tickets.length, true));
 	$("sheet-close").addEventListener("click", () => $("scrim").classList.remove("open"));
 	$("scrim").addEventListener("click", e => { if (e.target === $("scrim")) $("scrim").classList.remove("open"); });
 
@@ -1565,10 +1611,17 @@
 	$("next-box").addEventListener("click", () => { if (cur < BOXES_PER_ROUND - 1) { cur += 1; buildPrizes(); renderNav(); } });
 
 	$("rv-close").addEventListener("click", () => $("reveal").classList.remove("open"));
-	$("rv-again").addEventListener("click", () => { if (!busy) draw(lastDrawN); });
+	$("rv-again").addEventListener("click", () => { if (!busy && !$("rv-again").disabled) draw(againN); });
 
 	$("act-settle").addEventListener("click", settle);
 	$("r-close").addEventListener("click", () => $("result-scrim").classList.remove("open"));
+	$("r-newrun").addEventListener("click", () => {
+		resetRun();
+		$("result-scrim").classList.remove("open");
+		newRound(true);
+		buildPrizes(); renderNav(); renderStats();
+		toast(null, "新的一轮开始了 —— 战绩已清零", false);
+	});
 	$("result-scrim").addEventListener("click", e => {
 		if (e.target === $("result-scrim")) $("result-scrim").classList.remove("open");
 	});
@@ -1591,10 +1644,15 @@
 	$("online-n").textContent = activeRivals.length + 1;
 
 	// boot
+	const resumed = loadRun();
 	newRound(false);
 	buildPrizes();
 	renderNav();
 	renderStats();
+	if (resumed) {
+		setTimeout(() => toast(null,
+			"接着上次：已抽 <b>" + resumed + "</b> 发，「花」了 <b>" + money0(session.spent) + "</b>", false), 700);
+	}
 })();
 
 </script>
