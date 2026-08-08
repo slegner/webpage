@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+	<meta name="theme-color" content="#ffd400">
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="description" content="抽赏模拟器 — 纯前端小游戏，不涉及任何真实付款。">
+	<title>一番赏模拟器</title>
+
+	<style>
+		/* =========================================================
+		   一个模仿抽赏小程序的界面。全部图形都是内联 SVG，
+		   没有外部图片、没有支付、没有后端。
+		   ========================================================= */
+		:root {
+			--yellow:      #ffd400;
+			--yellow-dk:   #f5a623;
+			--yellow-lt:   #fff3b8;
+			--cream:       #fffbe8;
+			--ink:         #4a3b36;
+			--ink-lt:      #8a7466;
+			--green:       #8bc34a;
+			--green-dk:    #6ba32f;
+			--red:         #e8453c;
+			--pink:        #ff8fb0;
+			--card-shadow: 0 3px 0 rgba(0,0,0,.08), 0 6px 14px rgba(160,120,60,.14);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { -webkit-text-size-adjust: 100%; }
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+			             "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+			background: #f0e4c8;
+			color: var(--ink);
+			line-height: 1.4;
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+		}
+		button { font: inherit; color: inherit; border: none; background: none; cursor: pointer;
+		         -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; }
+
+		/* phone frame — full width on mobile, centred column on desktop */
+		.app {
+			width: 100%;
+			max-width: 460px;
+			background: var(--cream);
+			min-height: 100vh;
+			position: relative;
+			padding-bottom: 108px;
+			box-shadow: 0 0 40px rgba(120, 90, 40, .22);
+			overflow-x: hidden;
+		}
+
+		/* ---------- hero ---------- */
+		.hero {
+			position: relative;
+			padding: 12px 14px 14px;
+			background: linear-gradient(180deg, #9fdcf5 0%, #c9ecf7 55%, #ffe9a8 100%);
+			overflow: hidden;
+		}
+		.hero-plush {
+			position: absolute; inset: 0;
+			pointer-events: none;
+		}
+		.hero-plush img {
+			position: absolute; inset: 0;
+			width: 100%; height: 100%; object-fit: cover;
+		}
+		/* keeps the buttons legible over a busy banner */
+		.hero-plush::after {
+			content: ""; position: absolute; inset: 0;
+			background: linear-gradient(180deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,0) 38%,
+			                                    rgba(255,240,200,.10) 70%, rgba(255,228,140,.55) 100%);
+		}
+		.hero-row { position: relative; display: flex; align-items: flex-start; justify-content: space-between; }
+		.icon-btn {
+			width: 34px; height: 34px; border-radius: 50%;
+			background: rgba(255,255,255,.75);
+			display: flex; align-items: center; justify-content: center;
+			font-size: 1.25rem; font-weight: 700; color: #5b4a42;
+			backdrop-filter: blur(4px);
+		}
+		.ship-time {
+			text-align: right; font-size: .72rem; color: #6a5a4a; font-weight: 600;
+			background: rgba(255,255,255,.6); padding: 4px 9px; border-radius: 10px;
+			line-height: 1.35;
+		}
+		.ship-time b { display: block; font-size: .84rem; }
+
+		.join-pill {
+			position: relative;
+			display: inline-flex; align-items: center; gap: 7px;
+			margin-top: 12px;
+			background: var(--yellow); color: var(--ink);
+			font-size: .78rem; font-weight: 700;
+			padding: 4px 12px 4px 4px; border-radius: 999px;
+			box-shadow: 0 2px 0 rgba(0,0,0,.1);
+			max-width: 78%;
+		}
+		.join-pill .av {
+			width: 24px; height: 24px; border-radius: 50%;
+			background: #fff; display: flex; align-items: center; justify-content: center;
+			font-size: .9rem; flex: none;
+		}
+
+		.hero-actions {
+			position: relative;
+			display: flex; gap: 10px; margin-top: 14px;
+		}
+		.hero-action { text-align: center; width: 62px; }
+		.hero-action .circ {
+			width: 46px; height: 46px; margin: 0 auto;
+			border-radius: 50%;
+			background: linear-gradient(180deg, #ffe66d, var(--yellow));
+			border: 2px solid #fff;
+			box-shadow: 0 3px 0 rgba(190,140,20,.5);
+			display: flex; align-items: center; justify-content: center;
+			font-size: 1.3rem;
+		}
+		.hero-action .lbl {
+			display: block; margin-top: 4px;
+			font-size: .68rem; font-weight: 800; color: #fff;
+			text-shadow: 0 1px 0 #d99a1a, 0 -1px 0 #d99a1a, 1px 0 0 #d99a1a, -1px 0 0 #d99a1a, 0 2px 3px rgba(0,0,0,.3);
+			letter-spacing: .3px;
+		}
+		.hero-action:active .circ { transform: translateY(2px); box-shadow: 0 1px 0 rgba(190,140,20,.5); }
+
+		/* ---------- title ribbon ---------- */
+		.title-bar {
+			background: var(--yellow);
+			display: flex; align-items: center; justify-content: space-between;
+			padding: 9px 14px;
+			position: relative;
+		}
+		.title-bar h1 {
+			font-size: 1.16rem; font-weight: 900; letter-spacing: .5px;
+			color: #3d3129;
+		}
+		.title-bar h1 small { font-weight: 700; font-size: .8rem; opacity: .7; }
+		.online {
+			display: flex; align-items: center; gap: 5px;
+			background: #fff; border-radius: 999px; padding: 3px 10px 3px 3px;
+			font-size: .74rem; font-weight: 700; white-space: nowrap;
+		}
+		.online .av { width: 20px; height: 20px; border-radius: 50%; background: var(--yellow-lt);
+		               display: flex; align-items: center; justify-content: center; font-size: .75rem; }
+
+		/* ---------- tab row ---------- */
+		.tab-row {
+			display: grid; grid-template-columns: repeat(4, 1fr);
+			gap: 6px; padding: 10px 10px 4px;
+			background: linear-gradient(180deg, var(--yellow) 0%, #ffe873 100%);
+		}
+		.tab {
+			display: flex; flex-direction: column; align-items: center; gap: 3px;
+			font-size: .68rem; font-weight: 800; color: #5b4a42;
+		}
+		.tab .box {
+			width: 100%; padding: 6px 2px; border-radius: 9px;
+			background: #fff; border: 2px solid #fff;
+			box-shadow: 0 2px 0 rgba(150,110,20,.35);
+			text-align: center; font-size: 1.05rem;
+		}
+		.tab:active .box { transform: translateY(2px); box-shadow: none; }
+
+		/* ---------- box nav ---------- */
+		.box-nav {
+			display: flex; align-items: center; justify-content: space-between;
+			gap: 6px; padding: 8px 10px 12px;
+			background: linear-gradient(180deg, #ffe873 0%, #fff3b8 100%);
+			font-size: .78rem; font-weight: 800; color: #5b4a42;
+		}
+		.box-nav button {
+			background: #fff; border-radius: 8px; padding: 5px 10px;
+			box-shadow: 0 2px 0 rgba(150,110,20,.35);
+			font-size: .74rem; font-weight: 800; white-space: nowrap;
+		}
+		.box-nav button:disabled { opacity: .45; box-shadow: none; }
+		.box-nav .mid { text-align: center; flex: 1; white-space: nowrap; }
+		.box-nav .mid b { color: var(--red); font-size: .95rem; }
+
+		/* ---------- prize grid ---------- */
+		.prize-area { padding: 10px 10px 4px; background: var(--cream); }
+		.grid { display: grid; gap: 9px; margin-bottom: 9px; }
+		.grid.two   { grid-template-columns: repeat(2, 1fr); }
+		.grid.three { grid-template-columns: repeat(3, 1fr); }
+
+		.pcard {
+			background: #fff;
+			border-radius: 10px;
+			box-shadow: var(--card-shadow);
+			overflow: hidden;
+			position: relative;
+			display: flex; flex-direction: column;
+		}
+		.pcard.gone { filter: grayscale(1); opacity: .5; }
+		.pcard .count {
+			position: absolute; top: 0; left: 0; z-index: 2;
+			background: linear-gradient(180deg, #b6e26b, var(--green));
+			color: #fff; font-size: .72rem; font-weight: 800;
+			padding: 2px 9px; border-radius: 0 0 9px 0;
+			text-shadow: 0 1px 1px rgba(0,0,0,.2);
+		}
+		.pcard .ribbon {
+			position: absolute; top: 6px; right: -20px; z-index: 2;
+			background: #ffd9e6; color: #d2607c;
+			font-size: .55rem; font-weight: 800;
+			padding: 2px 22px; transform: rotate(45deg);
+		}
+		.pcard .pic {
+			background: #fff; display: flex; align-items: center; justify-content: center;
+			padding: 8px 6px 2px; gap: 3px;
+		}
+		.pcard .pic img { width: 100%; height: auto; max-height: 104px; object-fit: contain; }
+		.grid.two .pcard .pic img { max-width: 48%; }
+		.grid.three .pcard .pic img { max-height: 74px; }
+		.pcard .cap {
+			background: var(--yellow-lt);
+			padding: 5px 7px; font-size: .68rem; font-weight: 700; color: #4a3b2e;
+			line-height: 1.45; margin-top: auto;
+		}
+		.pcard .cap .rank { color: var(--red); font-weight: 900; }
+		.pcard .cap .note { display: block; font-weight: 500; color: #8a7466; font-size: .62rem; }
+		.pcard .cap .money { display: block; font-size: .6rem; color: #a08a5e; margin-top: 1px; }
+		.grid.three .pcard .cap { font-size: .64rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.grid.three .pcard .cap .note,
+		.grid.three .pcard .cap .money { white-space: normal; }
+
+		/* 全收 card */
+		.allin {
+			background: linear-gradient(180deg, #fff7cc, #ffe066);
+			border-radius: 10px; box-shadow: var(--card-shadow);
+			display: flex; flex-direction: column; align-items: center; justify-content: center;
+			padding: 12px 8px; position: relative; overflow: hidden;
+			min-height: 118px;
+		}
+		.allin .tagline {
+			background: var(--red); color: #fff; font-size: .66rem; font-weight: 800;
+			padding: 2px 10px; border-radius: 999px; margin-bottom: 6px;
+			box-shadow: 0 2px 0 rgba(150,20,10,.35);
+		}
+		.allin .big {
+			font-size: 1.7rem; font-weight: 900; color: #fff; letter-spacing: 1px;
+			text-shadow: 0 2px 0 var(--yellow-dk), 0 -2px 0 var(--yellow-dk),
+			             2px 0 0 var(--yellow-dk), -2px 0 0 var(--yellow-dk),
+			             0 4px 6px rgba(0,0,0,.25);
+		}
+		.allin .price { font-size: .72rem; font-weight: 800; color: #8a6a1a; margin-top: 4px; }
+		.allin:active { transform: translateY(2px); }
+
+		/* ---------- live stats strip ---------- */
+		.stats {
+			margin: 4px 10px 14px;
+			background: #fff; border-radius: 12px; box-shadow: var(--card-shadow);
+			padding: 11px 12px;
+		}
+		.stats .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; }
+		.stats .k { font-size: .62rem; color: var(--ink-lt); }
+		.stats .v { font-size: .95rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+		.stats .v.spend { color: var(--red); }
+		.stats .v.gain  { color: var(--green-dk); }
+		.stats .v.cost  { color: #6f8fa8; }
+		.stats .bar { height: 9px; background: #f0e6d2; border-radius: 999px; margin-top: 10px; overflow: hidden; }
+		.stats .bar span { display: block; height: 100%; width: 0; border-radius: 999px;
+		                   background: linear-gradient(90deg, #ffb4a2, #8bc34a); transition: width .5s ease; }
+		.stats .verdict { margin-top: 8px; font-size: .68rem; color: var(--ink-lt); line-height: 1.6; text-align: center; }
+		.stats .verdict b { color: var(--red); }
+
+		.foot-note {
+			padding: 0 14px 18px; font-size: .62rem; color: #a89578;
+			text-align: center; line-height: 1.8;
+		}
+
+		/* ---------- bottom draw bar ---------- */
+		.draw-bar {
+			position: fixed; bottom: 0; z-index: 60;
+			width: 100%; max-width: 460px;
+			background: linear-gradient(180deg, #fff3b8, var(--yellow));
+			border-top: 2px solid #fff;
+			padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+			box-shadow: 0 -4px 14px rgba(160,120,40,.2);
+		}
+		.draw-bar .points {
+			font-size: .66rem; font-weight: 800; color: #7a6320; text-align: center;
+			margin-bottom: 5px;
+		}
+		.draw-bar .btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+		.dbtn {
+			background: linear-gradient(180deg, #ffe873, #ffc61a);
+			border: 2px solid #fff; border-radius: 13px;
+			box-shadow: 0 4px 0 #d99a1a;
+			padding: 7px 2px 6px; text-align: center;
+		}
+		.dbtn .t {
+			font-size: 1.05rem; font-weight: 900; color: #fff; letter-spacing: .5px;
+			text-shadow: 0 1px 0 #c98a10, 0 -1px 0 #c98a10, 1px 0 0 #c98a10, -1px 0 0 #c98a10;
+		}
+		.dbtn .t b { font-size: 1.35rem; }
+		.dbtn .p { font-size: .78rem; font-weight: 800; color: #8a6410; font-variant-numeric: tabular-nums; }
+		.dbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #d99a1a; }
+		.dbtn:disabled { filter: grayscale(.7); opacity: .6; }
+
+		/* ---------- sheets & modals ---------- */
+		.scrim {
+			position: fixed; inset: 0; z-index: 100;
+			background: rgba(50,35,20,.55);
+			display: none; align-items: flex-end; justify-content: center;
+		}
+		.scrim.open { display: flex; }
+		.sheet {
+			width: 100%; max-width: 460px;
+			background: var(--cream);
+			border-radius: 18px 18px 0 0;
+			max-height: 82vh; display: flex; flex-direction: column;
+			animation: rise .25s ease both;
+		}
+		@keyframes rise { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+		.sheet-head {
+			background: var(--yellow); border-radius: 16px 16px 0 0;
+			padding: 11px 14px; display: flex; align-items: center; justify-content: space-between;
+			font-size: .95rem; font-weight: 900;
+		}
+		.sheet-head button { font-size: 1.3rem; line-height: 1; padding: 0 4px; }
+		.sheet-body { padding: 12px 14px 22px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+		table.plist { width: 100%; border-collapse: collapse; font-size: .72rem; }
+		table.plist th {
+			background: var(--yellow-lt); color: #6a5730; font-weight: 800;
+			padding: 6px 5px; text-align: right; white-space: nowrap;
+		}
+		table.plist th:first-child, table.plist td:first-child { text-align: left; }
+		table.plist td { padding: 6px 5px; text-align: right; border-bottom: 1px solid #f0e6d2;
+		                 font-variant-numeric: tabular-nums; white-space: nowrap; }
+		table.plist tr.out td { opacity: .45; }
+		table.plist .rk { font-weight: 900; color: var(--red); }
+		table.plist tfoot td { font-weight: 900; border-top: 2px solid var(--yellow); border-bottom: none; }
+
+		.log-item {
+			display: flex; align-items: center; gap: 9px;
+			padding: 7px 4px; border-bottom: 1px solid #f0e6d2; font-size: .74rem;
+		}
+		.log-item img { width: 34px; height: 34px; flex: none; border-radius: 6px; object-fit: contain; }
+		.log-item .who { flex: 1; line-height: 1.4; }
+		.log-item .who b { color: var(--red); }
+		.log-item .val { font-variant-numeric: tabular-nums; color: #8a7466; font-size: .7rem; text-align: right; }
+
+		.bag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+		.bag-item {
+			background: #fff; border-radius: 10px; box-shadow: var(--card-shadow);
+			padding: 7px 4px; text-align: center; position: relative;
+		}
+		.bag-item img { width: 100%; max-width: 58px; height: auto; object-fit: contain; }
+		.bag-item .n { font-size: .62rem; line-height: 1.3; margin-top: 2px; }
+		.bag-item .m { font-size: .56rem; color: #a08a5e; }
+		.bag-item .c {
+			position: absolute; top: 3px; right: 3px;
+			background: var(--red); color: #fff; font-size: .6rem; font-weight: 800;
+			border-radius: 999px; padding: 0 6px;
+		}
+		.empty { text-align: center; color: #b3a189; font-size: .78rem; padding: 26px 0; }
+
+		.rules { font-size: .78rem; line-height: 1.95; color: #5b4a42; }
+		.rules h4 { font-size: .85rem; margin: 14px 0 4px; color: #3d3129; }
+		.rules h4:first-child { margin-top: 0; }
+		.price-pick { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+		.price-pick button {
+			background: #fff; border: 2px solid #f0d98a; border-radius: 999px;
+			padding: 5px 13px; font-size: .76rem; font-weight: 800; color: #8a6a1a;
+		}
+		.price-pick button.on { background: var(--yellow); border-color: var(--yellow-dk); color: #4a3b2e; }
+		.toggle-row { display: flex; align-items: center; gap: 9px; margin-top: 8px; }
+		.toggle { width: 44px; height: 25px; border-radius: 999px; background: #ddd0b4; position: relative; flex: none; transition: background .2s; }
+		.toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 19px; height: 19px;
+		                 border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+		.toggle.on { background: var(--green); }
+		.toggle.on::after { transform: translateX(19px); }
+
+		/* ---------- reveal overlay ---------- */
+		.reveal {
+			position: fixed; inset: 0; z-index: 150;
+			background: rgba(45,30,15,.82);
+			display: none; flex-direction: column; align-items: center; justify-content: center;
+			padding: 18px;
+		}
+		.reveal.open { display: flex; }
+		.reveal-cards {
+			display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+			max-height: 66vh; overflow-y: auto; padding: 4px;
+		}
+		.card { width: 92px; height: 128px; perspective: 800px; animation: pop .3s ease both; }
+		@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: none; opacity: 1; } }
+		.card-in { position: relative; width: 100%; height: 100%; transform-style: preserve-3d;
+		           transition: transform .5s cubic-bezier(.4,1.6,.5,1); }
+		.card.flip .card-in { transform: rotateY(180deg); }
+		.face {
+			position: absolute; inset: 0; border-radius: 11px;
+			-webkit-backface-visibility: hidden; backface-visibility: hidden;
+			display: flex; flex-direction: column; align-items: center; justify-content: center;
+			overflow: hidden; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,.3);
+		}
+		.face.back { background: repeating-linear-gradient(45deg, #ffe066 0 9px, #ffd400 9px 18px); font-size: 1.6rem; }
+		.face.front { transform: rotateY(180deg); background: #fff; padding: 5px; }
+		.face.front img { width: 100%; max-width: 62px; height: auto; object-fit: contain; }
+		.face.front .rk {
+			position: absolute; top: 4px; left: 4px; background: var(--red); color: #fff;
+			font-size: .6rem; font-weight: 900; padding: 1px 6px; border-radius: 999px;
+		}
+		.face.front .nm { font-size: .6rem; font-weight: 700; text-align: center; line-height: 1.25; }
+		.face.front .vl { font-size: .55rem; color: #a08a5e; }
+		.card.rare .face.front { border-color: #ffd400; animation: glow 1.2s ease-in-out infinite alternate; }
+		@keyframes glow { from { box-shadow: 0 0 6px 2px rgba(255,212,0,.6); } to { box-shadow: 0 0 20px 7px rgba(255,190,30,.95); } }
+		.reveal-note {
+			margin-top: 14px; color: #fff; font-size: .85rem; font-weight: 800;
+			text-align: center; min-height: 2.4em; line-height: 1.5; text-shadow: 0 2px 4px rgba(0,0,0,.5);
+		}
+		.reveal-note.big { color: #ffe066; font-size: 1rem; }
+		.reveal-btns { display: flex; gap: 9px; margin-top: 12px; width: 100%; max-width: 330px; }
+		.reveal-btns .dbtn { flex: 1; }
+
+		/* ---------- result modal ---------- */
+		.result-scrim { align-items: center; padding: 16px; }
+		.result {
+			background: var(--cream); border-radius: 18px; width: 100%; max-width: 400px;
+			max-height: 86vh; overflow-y: auto; animation: pop .3s ease both;
+			border: 4px solid var(--yellow);
+		}
+		.result-head {
+			background: var(--yellow); padding: 14px; text-align: center;
+		}
+		.result-head .ttl { font-size: 1.1rem; font-weight: 900; }
+		.result-head .em { font-size: 2.2rem; margin-top: 4px; }
+		.result-head .rk { font-size: 1rem; font-weight: 900; color: var(--red); }
+		.result-body { padding: 14px 16px 18px; }
+		.result-body ul { list-style: none; font-size: .82rem; }
+		.result-body li { display: flex; justify-content: space-between; gap: 10px;
+		                  padding: 5px 0; border-bottom: 1px dashed #e8dcc0; }
+		.result-body li b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+		.punch {
+			margin-top: 13px; background: #e8f8ea; border: 2px solid var(--green);
+			border-radius: 12px; padding: 11px; text-align: center;
+			font-size: .9rem; font-weight: 800; color: #3f7c4a; line-height: 1.7;
+		}
+		.fine { margin-top: 11px; font-size: .7rem; color: var(--ink-lt); line-height: 1.8; }
+		.result .dbtn { margin-top: 14px; width: 100%; }
+
+		/* ---------- rival-player toasts ---------- */
+		.toasts {
+			position: fixed; bottom: 104px; z-index: 55;
+			width: 100%; max-width: 460px;
+			padding: 0 12px; pointer-events: none;
+			display: flex; flex-direction: column; gap: 5px; align-items: flex-start;
+		}
+		.toast {
+			display: flex; align-items: center; gap: 6px;
+			background: rgba(60,45,30,.86); color: #fff;
+			font-size: .68rem; font-weight: 600;
+			padding: 5px 11px 5px 5px; border-radius: 999px;
+			max-width: 100%;
+			animation: toastIn .28s ease both, toastOut .4s ease 3.4s both;
+		}
+		.toast .av { width: 19px; height: 19px; border-radius: 50%; background: var(--yellow);
+		             display: flex; align-items: center; justify-content: center; font-size: .68rem; flex: none; }
+		.toast b { color: #ffe066; }
+		.toast.hot { background: rgba(200,50,30,.9); }
+		.toast.hot b { color: #fff3b8; }
+		@keyframes toastIn  { from { transform: translateX(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+		@keyframes toastOut { to { opacity: 0; transform: translateY(-6px); } }
+
+		.rival-strip {
+			display: flex; align-items: center; gap: 5px;
+			padding: 6px 10px; background: #fff6d0;
+			font-size: .66rem; color: #7a6320; font-weight: 700;
+			overflow: hidden; white-space: nowrap;
+		}
+		.rival-strip .dot { width: 6px; height: 6px; border-radius: 50%; background: #4caf50; flex: none;
+		                    animation: blink 1.4s ease-in-out infinite; }
+		@keyframes blink { 50% { opacity: .25; } }
+		.rival-strip .who { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+		@media (max-width: 360px) {
+			.card { width: 80px; height: 112px; }
+			.face.front img { max-width: 48px; }
+			.hero-action { width: 56px; }
+		}
+	</style>
+</head>
+<body>
+<div class="app">
+
+	<!-- ============ HERO ============ -->
+	<header class="hero">
+		<div class="hero-plush" id="hero-plush"></div>
+		<div class="hero-row">
+			<a class="icon-btn" href="/" aria-label="返回">‹</a>
+			<div class="ship-time">出荷时间<b id="ship-month">2026年09月</b></div>
+		</div>
+		<div class="join-pill"><span class="av">🙂</span><span id="join-text">微***7 来啦</span></div>
+		<div class="hero-actions">
+			<button class="hero-action" data-open="sheet-rules"><span class="circ">📖</span><span class="lbl">玩法说明</span></button>
+			<button class="hero-action" data-open="sheet-bag"><span class="circ">👜</span><span class="lbl">我的赏袋</span></button>
+			<button class="hero-action" id="act-settle"><span class="circ">🧾</span><span class="lbl">结算单</span></button>
+			<button class="hero-action" id="act-newround"><span class="circ">🔄</span><span class="lbl">换一场</span></button>
+		</div>
+	</header>
+
+	<!-- ============ TITLE ============ -->
+	<div class="title-bar">
+		<h1 id="series-title">随机赏 <small>模拟版</small></h1>
+		<div class="online"><span class="av">🙂</span><span>当前 <b id="online-n">1</b> 人</span></div>
+	</div>
+
+	<!-- ============ TABS ============ -->
+	<nav class="tab-row">
+		<button class="tab" data-open="sheet-log"><span class="box">📋</span>中赏记录</button>
+		<button class="tab" data-open="sheet-all"><span class="box">📖</span>赏品全览</button>
+		<button class="tab" data-open="sheet-left"><span class="box">📦</span>赏品余量</button>
+		<button class="tab" id="tab-newround"><span class="box">🎁</span>换个箱子</button>
+	</nav>
+
+	<!-- ============ RIVAL STRIP ============ -->
+	<div class="rival-strip"><span class="dot"></span><span class="who" id="rival-strip">大家都在抽这一箱，手快有手慢无</span></div>
+
+	<!-- ============ BOX NAV ============ -->
+	<div class="box-nav">
+		<button id="prev-box">❮ 上一箱</button>
+		<div class="mid">第 <b id="box-i">1</b>/<span id="box-n">2</span> 箱 &nbsp;·&nbsp; 剩余 <b id="round-left">160</b>/<span id="round-total">160</span> 个</div>
+		<button id="next-box">下一箱 ❯</button>
+	</div>
+
+	<!-- ============ PRIZES ============ -->
+	<div class="prize-area">
+		<div class="grid two" id="grid-special"></div>
+		<div class="grid three" id="grid-main"></div>
+		<div class="grid two">
+			<div class="pcard" id="card-junk"></div>
+			<button class="allin" id="btn-allin">
+				<span class="tagline">赠 LAST 赏!!</span>
+				<span class="big">全收!!</span>
+				<span class="price" id="allin-price">剩余 80 发 ¥1520.00</span>
+			</button>
+		</div>
+	</div>
+
+	<!-- ============ LIVE STATS ============ -->
+	<div class="stats">
+		<div class="row">
+			<div><div class="k">抽了</div><div class="v" id="s-draws">0</div></div>
+			<div><div class="k">「花」掉</div><div class="v spend" id="s-spent">¥0</div></div>
+			<div><div class="k">市场价</div><div class="v gain" id="s-value">¥0</div></div>
+			<div><div class="k">工厂成本</div><div class="v cost" id="s-cost">¥0</div></div>
+		</div>
+		<div class="bar"><span id="s-bar"></span></div>
+		<div class="verdict" id="s-verdict">回本率 —— 先抽一发试试？反正不要钱。</div>
+	</div>
+
+	<p class="foot-note">
+		本页为模拟器：价格、库存、概率全部写在前端代码里，随机数来自你自己的浏览器。<br>
+		无支付接口、无服务器、无真实交易。角色插画为本页原创 SVG。<br>
+		「市场价 / 工厂成本」为娱乐性估值，不构成购买建议。
+	</p>
+
+	<!-- ============ TOASTS ============ -->
+	<div class="toasts" id="toasts"></div>
+
+	<!-- ============ BOTTOM BAR ============ -->
+	<div class="draw-bar">
+		<div class="points">下单送包邮积分：<span id="points">0</span>　·　实际支付 ¥0.00</div>
+		<div class="btns">
+			<button class="dbtn" data-draw="1"><div class="t">抽<b>1</b>次</div><div class="p" id="p1">¥19.00</div></button>
+			<button class="dbtn" data-draw="3"><div class="t">抽<b>3</b>次</div><div class="p" id="p3">¥57.00</div></button>
+			<button class="dbtn" data-draw="5"><div class="t">抽<b>5</b>次</div><div class="p" id="p5">¥95.00</div></button>
+		</div>
+	</div>
+</div>
+
+<!-- ============ SHEETS ============ -->
+<div class="scrim" id="scrim">
+	<div class="sheet">
+		<div class="sheet-head"><span id="sheet-title">赏品全览</span><button id="sheet-close">×</button></div>
+		<div class="sheet-body" id="sheet-body"></div>
+	</div>
+</div>
+
+<!-- ============ REVEAL ============ -->
+<div class="reveal" id="reveal">
+	<div class="reveal-cards" id="reveal-cards"></div>
+	<div class="reveal-note" id="reveal-note"></div>
+	<div class="reveal-btns">
+		<button class="dbtn" id="rv-again"><div class="t">再抽</div><div class="p" id="rv-again-p">¥19.00</div></button>
+		<button class="dbtn" id="rv-close"><div class="t">收下</div><div class="p">放进赏袋</div></button>
+	</div>
+</div>
+
+<!-- ============ RESULT ============ -->
+<div class="scrim result-scrim" id="result-scrim">
+	<div class="result">
+		<div class="result-head">
+			<div class="ttl">🧾 结算单</div>
+			<div class="em" id="r-em">🍀</div>
+			<div class="rk" id="r-rank">平民玩家</div>
+		</div>
+		<div class="result-body">
+			<ul>
+				<li><span>总共抽了</span><b id="r-draws">0 发</b></li>
+				<li><span>「花」掉</span><b id="r-spent">¥0</b></li>
+				<li><span>战利品市场价</span><b id="r-value">¥0</b></li>
+				<li><span>战利品工厂成本</span><b id="r-cost">¥0</b></li>
+				<li><span>盈亏（按市场价）</span><b id="r-net">¥0</b></li>
+				<li><span>回本率</span><b id="r-rate">0%</b></li>
+			</ul>
+			<div class="punch">💚 而你实际支付了 <b>¥0.00</b><br>钱包毫发无伤，快乐照收</div>
+			<div class="fine" id="r-fine"></div>
+			<button class="dbtn" id="r-close"><div class="t">继续抽</div></button>
+		</div>
+	</div>
+</div>
+
+<script>
+(function () {
+	"use strict";
+
+	/* =========================================================
+	   Asset catalogue — cropped from the user's own AI-generated
+	   product sheets. 50 plush figures + 20 acrylic charms.
+	   ========================================================= */
+	const PLUSH = [
+		"西装猫","水手仓鼠","雨衣兔","侦探猫","厨师仓鼠","面包师兔",
+		"女仆猫","魔法师猫","粉熊猫","蓝猫猫","草莓仓鼠","摄影师兔",
+		"骑士猫","棕熊猫","青蛙猫","蜗牛猫","花仙子仓鼠","蜜蜂兔",
+		"狮子仓鼠","恐龙猫","足球兔","烘焙仓鼠","学士猫","国王兔",
+		"宇航员仓鼠","睡衣猫","牛仔猫","农夫仓鼠","魔女猫","黄金骑士兔",
+		"吸血鬼猫","粉裙仓鼠","绅士兔","囚服猫","警察仓鼠","和服兔",
+		"独眼怪仓鼠","黑袍猫","邮差兔","小鸡警官仓鼠","草莓猫","南瓜兔",
+		"医生仓鼠","棕熊斗篷猫","熊猫兔","小鸡仓鼠","章鱼猫","恐龙兔",
+		"军乐队仓鼠","星星魔法兔"
+	].map((n, i) => ({ n: n, f: "img/p" + String(i + 1).padStart(2, "0") + ".jpg" }));
+
+	const ACRYLIC = [
+		"星星兔","水手猫","水手仓鼠","女仆兔","水手猫","水手仓鼠",
+		"草莓猫","侦探仓鼠","女仆兔","厨师猫","厨师仓鼠","蜜蜂仓鼠",
+		"魔法猫","冬装仓鼠","花仙子兔","西装猫","西装仓鼠","西装兔",
+		"睡衣猫","睡衣兔"
+	].map((n, i) => ({ n: n, f: "img/a" + String(i + 1).padStart(2, "0") + ".jpg" }));
+
+	const mk = (pre, names) => names.map((n, i) =>
+		({ n: n, f: "img/" + pre + String(i + 1).padStart(2, "0") + ".jpg" }));
+
+	const G = mk("g", ["睡衣拖鞋","睡眠眼罩","化妆收纳包","帆布托特包","玻璃吸管杯","保温杯"]);
+	const CUP    = mk("h", ["马克杯","珐琅杯","玻璃吸管杯","保温随行杯","汤碗杯"]).concat(G.slice(4));
+	const BAG    = mk("j", ["帆布托特包","拉链收纳包","手提小包","束口袋","粉边收纳包"]).concat(G.slice(2, 4));
+	const SLEEP  = mk("k", ["长袖睡衣套装","短袖睡衣套装","睡裤","睡眠眼罩","睡衣拖鞋"]).concat(G.slice(0, 2));
+	const COOKIE = mk("m", ["猫造型饼干","仓鼠造型饼干","猫压印饼干","仓鼠压印饼干",
+	                        "饼干独立包（蓝）","饼干独立包（粉）","饼干礼盒（蓝）",
+	                        "饼干礼盒（粉）","饼干礼盒（黄）"]);
+	const TISSUE = mk("t", ["口袋纸巾（蓝）","口袋纸巾（粉）","口袋纸巾（黄）","口袋纸巾（三兽）",
+	                        "纸巾三连包（蓝）","纸巾礼盒（黄）","纸巾三连包（粉）","纸巾三连包（黄）"]);
+
+	// banner4 already prints its own 出荷时间, so the page chip steps aside for it
+	const BANNERS = [
+		{ f: "img/banner1.jpg", ship: true },
+		{ f: "img/banner2.jpg", ship: true },
+		{ f: "img/banner3.jpg", ship: true },
+		{ f: "img/banner4.jpg", ship: false }
+	];
+
+	const POOLS = { plush: PLUSH, acrylic: ACRYLIC, cup: CUP, bag: BAG,
+	                sleep: SLEEP, cookie: COOKIE, tissue: TISSUE };
+
+	function imgTag(a, cls) {
+		return '<img src="' + a.f + '" alt="' + a.n + '" loading="lazy"' + (cls ? ' class="' + cls + '"' : '') + '>';
+	}
+
+	/* =========================================================
+	   Series generator — every round is a brand-new 赏:
+	   fresh theme name, fresh prize ladder, fresh counts,
+	   fresh prices. No two rounds look the same.
+	   ========================================================= */
+	const THEMES = [
+		"星空","职人","魔法","童话","夏日","冬日","校园","万圣",
+		"森林","海洋","甜点","马戏团","睡衣","冒险","节日","水手",
+		"花园","月夜","咖啡馆","旅行","糖果","雨天"
+	];
+	const SUFFIX = ["赏", "一番赏", "限定赏", "特别赏"];
+
+	// value ranges are in CNY before calibration; cr = 工厂成本 / 市场价
+	const BIG_TYPES = [
+		{ name: "特大号毛绒公仔", v: [150, 210], cr: 0.15, src: "plush" },
+		{ name: "大号毛绒公仔",   v: [110, 160], cr: 0.15, src: "plush" },
+		{ name: "中号毛绒公仔",   v: [80, 120],  cr: 0.16, src: "plush" },
+		{ name: "限定睡衣套装",   v: [110, 150], cr: 0.18, src: "sleep" },
+		{ name: "限定毛绒挂件",   v: [65, 95],   cr: 0.18, src: "plush" }
+	];
+	const MID_TYPES = [
+		{ name: "毛绒挂件",   v: [40, 60], cr: 0.20, src: "plush",   c: [4, 8] },
+		{ name: "亚克力立牌", v: [18, 28], cr: 0.18, src: "acrylic", c: [5, 10] },
+		{ name: "陶瓷马克杯", v: [35, 55], cr: 0.25, src: "cup",     c: [4, 8] },
+		{ name: "玻璃随行杯", v: [45, 70], cr: 0.26, src: "cup",     c: [3, 6] },
+		{ name: "帆布托特包", v: [40, 65], cr: 0.23, src: "bag",     c: [4, 7] },
+		{ name: "收纳小包",   v: [28, 45], cr: 0.22, src: "bag",     c: [5, 9] },
+		{ name: "睡眠小物",   v: [30, 50], cr: 0.21, src: "sleep",   c: [4, 8] },
+		{ name: "造型饼干",   v: [15, 25], cr: 0.28, src: "cookie",  c: [6, 11] },
+		{ name: "饼干礼盒",   v: [25, 40], cr: 0.30, src: "cookie",  c: [5, 9] },
+		{ name: "亚克力徽章", v: [19, 25], cr: 0.16, src: "acrylic", c: [6, 11] },
+		{ name: "亚克力吧唧", v: [16, 23], cr: 0.17, src: "acrylic", c: [6, 11] }
+	];
+	const SMALL_TYPE = { name: "亚克力挂件", v: [9.5, 12], cr: 0.17, src: "acrylic", c: [14, 26] };
+	const JUNK_TYPE  = { name: "口袋纸巾",   v: [2.5, 4.5], cr: 0.15, src: "tissue", junk: true };
+
+	const RANKS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
+	const RANK_COLORS = ["#e2748c","#e08a5b","#c9a227","#7ba7d9","#8ec3a5","#a99ad4",
+	                     "#d99ab8","#b8a08e","#9fb0bd","#a8a8a8","#c4c4c4"];
+
+	const BOXES_PER_ROUND = 2;
+	const BASE_PRICE = 19;   // the headline single-draw price the ladder is balanced against
+
+	const rnd  = (lo, hi) => lo + Math.random() * (hi - lo);
+	const rndi = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
+	const pick = a => a[Math.floor(Math.random() * a.length)];
+
+	function shuffle(a) {
+		for (let i = a.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			const t = a[i]; a[i] = a[j]; a[j] = t;
+		}
+		return a;
+	}
+
+	function nice(v) {
+		if (v >= 60) return Math.round(v / 5) * 5;
+		if (v >= 10) return Math.round(v);
+		return Math.round(v * 2) / 2;
+	}
+
+	function assetsFor(src, k) {
+		const pool = shuffle((POOLS[src] || PLUSH).slice());
+		return pool.slice(0, Math.max(1, Math.min(k, pool.length)));
+	}
+
+	function makeSeries() {
+		const title = pick(THEMES) + pick(SUFFIX);
+		const wave  = rndi(1, 9);
+		// each series sets its own single-draw price, shop style
+		const price = pick([13.9, 14.9, 15.9, 16.9, 17.9, 18.9]);
+
+		const bigs = shuffle(BIG_TYPES.slice()).slice(0, 3)
+			.sort((a, b) => (b.v[0] + b.v[1]) - (a.v[0] + a.v[1]));
+		const mids = shuffle(MID_TYPES.slice()).slice(0, 4);
+
+		const tiers = [];
+		bigs.forEach(t => tiers.push({ type: t, count: 1 }));
+		mids.forEach(t => tiers.push({ type: t, count: rndi(t.c[0], t.c[1]) }));
+
+		function dress(t, i, count) {
+			t.rank = RANKS[i];
+			t.color = RANK_COLORS[i];
+			t.name = t.type.name;
+			t.rare = i < 3;
+			t.junk = !!t.type.junk;
+			t.count = count;
+			t.assets = assetsFor(t.type.src, count === 1 ? 1 : Math.min(4, Math.max(2, Math.round(count / 5))));
+			t.cost = Math.max(0.2, Math.round(t.value * t.type.cr * 10) / 10);
+			return t;
+		}
+		tiers.forEach((t, i) => { t.value = nice(rnd(t.type.v[0], t.type.v[1])); dress(t, i, t.count); });
+
+		const tokType = pick(BIG_TYPES), lastType = BIG_TYPES[0];
+		const tokuten = { rank: "特典", name: "特典 " + tokType.name, rare: true, type: tokType,
+		                  assets: assetsFor(tokType.src, 1), value: nice(rnd(90, 140)) };
+		const lastOne = { rank: "LAST", name: "LAST " + lastType.name, rare: true, type: lastType,
+		                  assets: assetsFor(lastType.src, 1), value: nice(rnd(160, 240)) };
+		[tokuten, lastOne].forEach(t => { t.cost = Math.round(t.value * t.type.cr * 10) / 10; });
+
+		// Everything above is priced at its real-world value. The two free
+		// parameters left are how many acrylic charms and how many packs of
+		// tissues get stuffed in — those are what drag a box back down to a
+		// realistic 62-80% return at this series' price.
+		const used   = tiers.reduce((a, t) => a + t.count, 0);
+		const fixedV = tiers.reduce((a, t) => a + t.count * t.value, 0) + tokuten.value + lastOne.value;
+		const sv = nice(rnd(SMALL_TYPE.v[0], SMALL_TYPE.v[1]));
+		const jv = Math.round(rnd(JUNK_TYPE.v[0], JUNK_TYPE.v[1]) * 2) / 2;
+		const ratio = rnd(0.16, 0.34);          // charms per tissue — always the smaller pile
+		const per = price * rnd(0.62, 0.80);
+
+		let junkN = Math.round((per * used - fixedV) / (ratio * sv + jv - per * (1 + ratio)));
+		junkN = Math.max(50, Math.min(260, junkN));
+		let smallN = Math.max(12, Math.min(80, Math.round(junkN * ratio)));
+
+		tiers.push(dress({ type: SMALL_TYPE, value: sv }, tiers.length, smallN));
+		tiers.push(dress({ type: JUNK_TYPE,  value: jv }, tiers.length, junkN));
+
+		const boxSize = used + smallN + junkN;
+		const totalV = tiers.reduce((a, t) => a + t.count * t.value, 0) + tokuten.value + lastOne.value;
+		const totalC = tiers.reduce((a, t) => a + t.count * t.cost, 0) + tokuten.cost + lastOne.cost;
+
+		return { title: title, wave: wave, price: price, tiers: tiers,
+		         tokuten: tokuten, lastOne: lastOne, boxSize: boxSize,
+		         smallN: smallN, junkN: junkN, totalV: totalV, totalC: totalC };
+	}
+
+	/* =========================================================
+	   State
+	   ========================================================= */
+	const LS_KEY = "kuji-sim-v5";
+
+	let price = BASE_PRICE;   // overwritten by each series
+	let autoNext = true;                 // roll into the next box / round automatically
+	let round = 1;
+	let series = null;                   // the randomly generated 赏 for this round
+	let boxes = [];
+	let cur = 0;
+	let session = { draws: 0, spent: 0, value: 0, cost: 0, boxesCleared: 0, rare: 0, junk: 0 };
+	let bag = new Map();
+	let log = [];
+	let lifetime = loadLifetime();
+	let busy = false;
+	let lastDrawN = 1;
+
+	function loadLifetime() {
+		try {
+			const d = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+			if (d && typeof d.draws === "number") return d;
+		} catch (e) {}
+		return { draws: 0, spent: 0, value: 0, cost: 0, rounds: 0 };
+	}
+	function saveLifetime() {
+		try { localStorage.setItem(LS_KEY, JSON.stringify(lifetime)); } catch (e) {}
+	}
+
+	function makeBox() {
+		const tickets = [];
+		const left = {};
+		series.tiers.forEach(t => {
+			left[t.rank] = t.count;
+			for (let i = 0; i < t.count; i++) {
+				tickets.push({
+					rank: t.rank, name: t.name, color: t.color,
+					value: t.value, cost: t.cost,
+					rare: !!t.rare, junk: !!t.junk,
+					asset: pick(t.assets)
+				});
+			}
+		});
+		shuffle(tickets);
+		return {
+			tickets: tickets, left: left, drawn: 0, lastGone: false,
+			tokutenAt: 1 + Math.floor(Math.random() * series.boxSize),   // 特典赏 goes to this ordinal
+			tokutenGone: false
+		};
+	}
+
+	// A brand-new round = a brand-new series: different theme, prizes,
+	// counts and prices every single time.
+	function newRound(bump) {
+		if (bump) { round += 1; lifetime.rounds = (lifetime.rounds || 0) + 1; saveLifetime(); }
+		series = makeSeries();
+		price = series.price;
+		boxes = [];
+		for (let i = 0; i < BOXES_PER_ROUND; i++) boxes.push(makeBox());
+		cur = 0;
+		const t = document.getElementById("series-title");
+		if (t) t.innerHTML = series.title + ' <small>第' + series.wave + '弹</small>';
+		const hero = document.getElementById("hero-plush");
+		if (hero) {
+			const bn = pick(BANNERS);
+			hero.innerHTML = '<img src="' + bn.f + '" alt="">';
+			const chip = document.querySelector(".ship-time");
+			if (chip) chip.style.display = bn.ship ? "" : "none";
+		}
+	}
+
+	const box = () => boxes[cur];
+	const roundLeft = () => boxes.reduce((s, b) => s + b.tickets.length, 0);
+	const roundTotal = () => series.boxSize * BOXES_PER_ROUND;
+
+	/* =========================================================
+	   Formatting
+	   ========================================================= */
+	const $ = id => document.getElementById(id);
+	const money  = n => "¥" + n.toFixed(2);
+	const money0 = n => "¥" + Math.round(n).toLocaleString("en-US");
+	const moneyS = n => "¥" + (Math.round(n * 10) / 10);
+
+	/* =========================================================
+	   Rendering
+	   ========================================================= */
+	function specialCards() {
+		const b = box();
+		return [
+			{ it: series.tokuten, gone: b.tokutenGone,
+			  note: '(非卖品) 此箱第 <b style="color:#e8453c">' + b.tokutenAt + '</b> 个获得，先到先得' },
+			{ it: series.lastOne, gone: b.lastGone,
+			  note: '(非卖品) 随<b style="color:#e8453c">最后一赏</b>送出' }
+		];
+	}
+
+	function renderPrizes() {
+		const b = box();
+
+		$("grid-special").innerHTML = specialCards().map(o => `
+			<div class="pcard${o.gone ? " gone" : ""}">
+				<span class="count">${o.gone ? "0/1" : "1/1"}</span>
+				<span class="ribbon">预售</span>
+				<div class="pic">${imgTag(o.it.assets[0])}</div>
+				<div class="cap">
+					<span class="note">${o.note}</span>
+					<span class="rank">${o.it.rank}赏</span> ${o.it.name}
+					<span class="money">市场价 ${moneyS(o.it.value)}</span>
+				</div>
+			</div>`).join("");
+
+		const main = series.tiers.slice(0, series.tiers.length - 1);
+		$("grid-main").innerHTML = main.map(t => {
+			const rem = b.left[t.rank];
+			return `<div class="pcard${rem === 0 ? " gone" : ""}">
+				<span class="count">${rem}/${t.count}</span>
+				<span class="ribbon">预售</span>
+				<div class="pic">${imgTag(t.assets[0])}</div>
+				<div class="cap">
+					<span class="rank">${t.rank}赏</span> ${t.name}
+					<span class="money">市场价 ${moneyS(t.value)}</span>
+				</div>
+			</div>`;
+		}).join("");
+
+		const j = series.tiers[series.tiers.length - 1];
+		const jr = b.left[j.rank];
+		$("card-junk").className = "pcard" + (jr === 0 ? " gone" : "");
+		$("card-junk").innerHTML =
+			`<span class="count">${jr}/${j.count}</span>
+			 <span class="ribbon">预售</span>
+			 <div class="pic">${imgTag(j.assets[0])}</div>
+			 <div class="cap">
+				<span class="rank">${j.rank}赏</span> ${j.name}
+				<span class="note">安慰奖，箱子里最多的东西</span>
+				<span class="money">市场价 ${moneyS(j.value)}</span>
+			 </div>`;
+	}
+
+	function renderNav() {
+		$("box-i").textContent = cur + 1;
+		$("box-n").textContent = BOXES_PER_ROUND;
+		$("round-left").textContent = roundLeft();
+		$("round-total").textContent = roundTotal();
+		$("prev-box").disabled = cur === 0;
+		$("next-box").disabled = cur >= BOXES_PER_ROUND - 1;
+		$("allin-price").textContent = "剩余 " + box().tickets.length + " 发 " + money(price * box().tickets.length);
+		$("btn-allin").disabled = box().tickets.length === 0;
+
+		$("p1").textContent = money(price);
+		$("p3").textContent = money(price * 3);
+		$("p5").textContent = money(price * 5);
+		$("rv-again-p").textContent = money(price * lastDrawN);
+		$("points").textContent = Math.floor(session.spent / 10);
+
+		const dead = roundLeft() === 0 && !autoNext;
+		document.querySelectorAll("[data-draw]").forEach(el => { el.disabled = busy || dead; });
+	}
+
+	function rating(rate) {
+		if (rate >= 1.15) return { em: "👑", name: "传说级欧皇", line: "这箱是你家开的吧？" };
+		if (rate >= 0.95) return { em: "✨", name: "欧皇",       line: "回本还有的赚，见好就收。" };
+		if (rate >= 0.78) return { em: "🍀", name: "小欧",       line: "运气不错，会被朋友羡慕的水平。" };
+		if (rate >= 0.62) return { em: "🙂", name: "平民玩家",   line: "非常标准的抽赏体验：略亏，但开心。" };
+		if (rate >= 0.45) return { em: "💸", name: "非酋",       line: "亚克力挂件与纸巾收藏家（褒义）。" };
+		return { em: "🪦", name: "究极非酋", line: "建议改行买现货，真的。" };
+	}
+
+	function renderStats() {
+		const s = session;
+		$("s-draws").textContent = s.draws;
+		$("s-spent").textContent = money0(s.spent);
+		$("s-value").textContent = money0(s.value);
+		$("s-cost").textContent = money0(s.cost);
+
+		const rate = s.spent > 0 ? s.value / s.spent : 0;
+		$("s-bar").style.width = Math.min(rate, 1.5) / 1.5 * 100 + "%";
+
+		if (s.draws === 0) {
+			$("s-verdict").innerHTML = "回本率 —— 先抽一发试试？反正不要钱。";
+		} else {
+			const r = rating(rate);
+			const net = s.value - s.spent;
+			$("s-verdict").innerHTML =
+				"回本率 <b>" + (rate * 100).toFixed(1) + "%</b> · " + r.em + " " + r.name +
+				"　|　" + (net >= 0 ? "净赚 " : "净亏 ") + "<b>" + money0(Math.abs(net)) + "</b>" +
+				"　|　实付 <b>¥0.00</b>";
+		}
+	}
+
+	function addToBag(item) {
+		const key = item.rank + "|" + item.asset.f + "|" + item.name;
+		const cur2 = bag.get(key);
+		if (cur2) cur2.n += 1;
+		else bag.set(key, Object.assign({}, item, { n: 1 }));
+	}
+
+	/* =========================================================
+	   Drawing — you and the rivals share one pool
+	   ========================================================= */
+	function pullFrom(bi, mine) {
+		const b = boxes[bi];
+		if (!b || b.tickets.length === 0) return null;
+
+		const got = [];
+		const item = b.tickets.pop();
+		b.left[item.rank] -= 1;
+		b.drawn += 1;
+		got.push(item);
+
+		if (!b.tokutenGone && b.drawn === b.tokutenAt) {
+			b.tokutenGone = true;
+			got.push(Object.assign({}, series.tokuten, { asset: series.tokuten.assets[0] }));
+		}
+		if (b.tickets.length === 0) {
+			b.lastGone = true;
+			if (mine) session.boxesCleared += 1;
+			got.push(Object.assign({}, series.lastOne, { asset: series.lastOne.assets[0] }));
+		}
+		return got;
+	}
+
+	function pullOne() {
+		if (box().tickets.length === 0) {
+			let next = -1;
+			for (let i = 0; i < BOXES_PER_ROUND; i++) if (boxes[i].tickets.length > 0) { next = i; break; }
+			if (next >= 0) cur = next;
+			else if (autoNext) {
+				newRound(true);
+				toast(null, "本场已抽空 —— 新系列「" + series.title + "」开箱了", false);
+				renderPrizes();
+			} else return null;
+		}
+		return pullFrom(cur, true);
+	}
+
+	function draw(n) {
+		if (busy) return;
+		busy = true;
+		lastDrawN = n;
+
+		const pulled = [];
+		for (let i = 0; i < n; i++) {
+			const got = pullOne();
+			if (!got) break;
+			session.draws += 1;
+			session.spent += price;
+			lifetime.draws += 1;
+			lifetime.spent += price;
+			got.forEach(it => pulled.push(it));
+		}
+		if (pulled.length === 0) { busy = false; renderNav(); return; }
+
+		pulled.forEach(it => {
+			session.value += it.value;
+			session.cost += it.cost;
+			lifetime.value += it.value;
+			lifetime.cost = (lifetime.cost || 0) + it.cost;
+			if (it.rare) session.rare += 1;
+			if (it.junk) session.junk += 1;
+			addToBag(it);
+			log.unshift(Object.assign({}, it, { t: new Date(), by: "你" }));
+		});
+		if (log.length > 200) log.length = 200;
+		saveLifetime();
+
+		showReveal(pulled);
+		renderPrizes();
+		renderNav();
+		renderStats();
+	}
+
+	const REVEAL_CAP = 60;   // "全收" can pull hundreds; only render a readable slice
+
+	function showReveal(pulled) {
+		const wrap = $("reveal-cards");
+		const shown = pulled.length > REVEAL_CAP
+			? pulled.slice().sort((a, b) => (b.rare ? 1 : 0) - (a.rare ? 1 : 0)).slice(0, REVEAL_CAP)
+			: pulled;
+		const hidden = pulled.length - shown.length;
+		wrap.innerHTML = shown.map(it => `
+			<div class="card${it.rare ? " rare" : ""}">
+				<div class="card-in">
+					<div class="face back">🎫</div>
+					<div class="face front">
+						<span class="rk">${it.rank}</span>
+						${imgTag(it.asset)}
+						<span class="nm">${it.name}</span>
+						<span class="vl">市 ${moneyS(it.value)}<br><i>本 ${moneyS(it.cost)}</i></span>
+					</div>
+				</div>
+			</div>`).join("") + (hidden > 0
+				? `<div style="align-self:center;color:#fff;font-size:.8rem;font-weight:700;padding:0 10px">…以及其他 ${hidden} 件<br><span style="font-weight:400;opacity:.8">（多半是纸巾）</span></div>`
+				: "");
+		$("reveal-note").textContent = "";
+		$("reveal-note").className = "reveal-note";
+		$("reveal").classList.add("open");
+
+		const cards = Array.prototype.slice.call(wrap.querySelectorAll(".card"));
+		const gap = pulled.length > 12 ? Math.max(8, Math.round(2600 / pulled.length)) : 170;
+		cards.forEach((c, i) => setTimeout(() => c.classList.add("flip"), 180 + i * gap));
+
+		setTimeout(() => {
+			busy = false;
+			renderNav();
+			announce(pulled);
+		}, 240 + cards.length * gap + 300);
+	}
+
+	function announce(pulled) {
+		const note = $("reveal-note");
+		const rares = pulled.filter(p => p.rare);
+		const junks = pulled.filter(p => p.junk).length;
+		if (rares.length) {
+			const b = rares[rares.length - 1];
+			note.className = "reveal-note big";
+			note.textContent = "🎊 恭喜中得 " + b.rank + "赏 " + b.name + "！市场价约 " + moneyS(b.value);
+		} else if (junks === pulled.length) {
+			note.textContent = pulled.length === 1 ? "……一包纸巾。擦擦眼泪吧。" : "全是纸巾。你现在很干爽。";
+		} else {
+			const v = pulled.reduce((s, p) => s + p.value, 0);
+			const c = pulled.reduce((s, p) => s + p.cost, 0);
+			note.textContent = "这一轮到手市场价 " + moneyS(v) + "（工厂成本 " + moneyS(c) +
+			                   "），你「付」了 " + money(lastDrawN * price) + "。";
+		}
+	}
+
+	/* =========================================================
+	   Sheets
+	   ========================================================= */
+	function openSheet(kind) {
+		const body = $("sheet-body");
+		let title = "";
+
+		if (kind === "sheet-all") {
+			title = series.title + " · 赏品全览";
+			const rows = series.tiers.map(t =>
+				`<tr><td><span class="rk">${t.rank}赏</span> ${t.name}</td>
+				 <td>${t.count}</td><td>${moneyS(t.value)}</td></tr>`).join("");
+			const extra = [series.tokuten, series.lastOne].map(t =>
+				`<tr><td><span class="rk">${t.rank}</span> ${t.name}</td>
+				 <td>1</td><td>${moneyS(t.value)}</td></tr>`).join("");
+			const boxPrice = price * series.boxSize;
+			body.innerHTML =
+				`<table class="plist">
+					<thead><tr><th>赏品</th><th>数量</th><th>市场价</th></tr></thead>
+					<tbody>${rows}${extra}</tbody>
+					<tfoot><tr><td>整箱合计（${series.boxSize} 发）</td><td>${series.boxSize}</td>
+					<td>${moneyS(series.totalV)}</td></tr></tfoot>
+				</table>
+				<div class="rules" style="margin-top:12px">
+					<h4>这箱的账</h4>
+					整箱售价 <b>${money(boxPrice)}</b>（${money(price)} × ${series.boxSize}）<br>
+					奖品市场价合计 <b>${moneyS(series.totalV)}</b> → 满箱回本率 <b>${(series.totalV / boxPrice * 100).toFixed(1)}%</b><br>
+					<span style="color:#c9a227">工厂成本不写在赏品表里 —— 抽到手才会告诉你 🤫</span><br>
+					<span style="color:#8a7466">抽满一整箱，平均也只能拿回七成左右。这就是抽赏。<br>
+					每换一场，系列、奖品、数量和价格都会重新随机生成一遍。</span>
+				</div>`;
+
+		} else if (kind === "sheet-left") {
+			title = "赏品余量";
+			const b = box();
+			const rows = series.tiers.map(t => {
+				const rem = b.left[t.rank];
+				const p = b.tickets.length ? (rem / b.tickets.length * 100) : 0;
+				return `<tr class="${rem === 0 ? "out" : ""}"><td><span class="rk">${t.rank}赏</span> ${t.name}</td>
+				        <td>${rem} / ${t.count}</td><td>${p.toFixed(1)}%</td></tr>`;
+			}).join("");
+			body.innerHTML =
+				`<div class="rules" style="margin-bottom:10px">
+					<b>${series.title}</b> 第${series.wave}弹<br>
+					第 ${cur + 1} 箱剩余 <b>${b.tickets.length}</b> / ${series.boxSize} 发　·　本场剩余 <b>${roundLeft()}</b> / ${roundTotal()} 发<br>
+					特典赏：${b.tokutenGone ? "已被抽走" : "第 <b>" + b.tokutenAt + "</b> 个抽中"}　·
+					LAST 赏：${b.lastGone ? "已发出" : "未发出"}
+				</div>
+				<table class="plist">
+					<thead><tr><th>赏品</th><th>余量</th><th>下一发概率</th></tr></thead>
+					<tbody>${rows}</tbody>
+				</table>`;
+
+		} else if (kind === "sheet-log") {
+			title = "中赏记录";
+			body.innerHTML = log.length === 0
+				? '<div class="empty">还没有记录。</div>'
+				: log.map(it => {
+					const mine = it.by === "你";
+					return `<div class="log-item"${mine ? ' style="background:#fff6d0"' : ""}>
+						${imgTag(it.asset)}
+						<div class="who">
+							<span style="color:${mine ? "#e8453c" : "#8a7466"};font-weight:800">${it.by}</span>
+							中得 <b>${it.rank}赏</b> ${it.name}<br>
+							<span style="color:#a08a5e;font-size:.66rem">${it.asset.n} · ${it.t.toLocaleTimeString("zh-CN")}</span>
+						</div>
+						<div class="val">市 ${moneyS(it.value)}<br>本 ${moneyS(it.cost)}</div>
+					</div>`;
+				}).join("");
+
+		} else if (kind === "sheet-bag") {
+			title = "我的赏袋";
+			if (bag.size === 0) {
+				body.innerHTML = '<div class="empty">赏袋是空的。</div>';
+			} else {
+				const order = { "特典": -2, LAST: -1 };
+				RANKS.forEach((r, i) => { order[r] = i; });
+				const items = Array.from(bag.values()).sort((a, b2) => order[a.rank] - order[b2.rank]);
+				const n = items.reduce((s, i) => s + i.n, 0);
+				body.innerHTML =
+					`<div class="rules" style="margin-bottom:10px">共 <b>${n}</b> 件　·　市场价 <b>${money0(session.value)}</b>　·　工厂成本 <b>${money0(session.cost)}</b></div>
+					 <div class="bag-grid">` +
+					items.map(it => `<div class="bag-item">
+						<span class="c">×${it.n}</span>
+						${imgTag(it.asset)}
+						<div class="n"><b style="color:#e8453c">${it.rank}</b> ${it.name}</div>
+						<div class="m">市 ${moneyS(it.value * it.n)} / 本 ${moneyS(it.cost * it.n)}</div>
+					</div>`).join("") + `</div>`;
+			}
+
+		} else if (kind === "sheet-rules") {
+			title = "玩法说明";
+			const lr = lifetime.spent > 0 ? (lifetime.value / lifetime.spent * 100).toFixed(1) + "%" : "—";
+			body.innerHTML =
+				`<div class="rules">
+					<h4>这是什么</h4>
+					一个抽赏模拟器。<b>没有支付接口、没有服务器、没有账号</b>，所有金额都是页面里编出来的数字。
+					你可以一直抽到手酸，实际支付永远是 <b>¥0.00</b>。
+
+					<h4>规则</h4>
+					· 一场 ${BOXES_PER_ROUND} 箱，每箱 <b>${series.boxSize}</b> 发（每场都不一样），抽走不补<br>
+					· <b>每换一场都会随机生成全新系列</b>：主题名、奖品阵容、数量、价格都不一样<br>
+					· <b>特典赏</b>：每箱随机指定一个序号，抽到那一发的人额外获得<br>
+					· <b>LAST 赏</b>：抽空整箱的那一发额外获得<br>
+					· <b>其他玩家和你抽同一箱</b>，他们会把你想要的抽走<br>
+					· 「全收」= 把当前这箱剩下的全抽了，必得 LAST 赏
+
+					<h4>本场单抽价</h4>
+					<b style="font-size:1.1rem;color:#e8453c">${money(series.price)}</b> / 抽　
+					<span style="color:#8a7466;font-size:.72rem">（每场 ¥13–19 随机，纸巾和亚克力挂件的数量会跟着调整来配平整箱）</span>
+
+					<div class="toggle-row">
+						<button class="toggle${autoNext ? " on" : ""}" id="tg-auto" aria-label="自动续场"></button>
+						<span>抽完自动开下一场（想抽多久抽多久）</span>
+					</div>
+					<div class="toggle-row">
+						<button class="toggle${rivalsOn ? " on" : ""}" id="tg-rivals" aria-label="其他玩家"></button>
+						<span>其他玩家同时在抽（他们会抢走奖品，关掉就只有你一个人）</span>
+					</div>
+
+					<h4>累计生涯</h4>
+					抽了 <b>${lifetime.draws}</b> 发　·　「花」 <b>${money0(lifetime.spent)}</b>　·
+					市场价 <b>${money0(lifetime.value)}</b>　·　回本率 <b>${lr}</b><br>
+					<span style="color:#8a7466;font-size:.72rem">（只存在你自己浏览器的 localStorage 里）</span>
+					<div style="margin-top:10px"><button class="dbtn" id="btn-wipe" style="padding:8px"><div class="t" style="font-size:.85rem">清空所有记录</div></button></div>
+
+					<h4>免责</h4>
+					<span style="color:#8a7466;font-size:.72rem">
+					商品图为站主自行生成的原创角色素材。「市场价 / 工厂成本」是按公开报道量级随手估的娱乐数字，
+					不构成购买或投资建议。真要买请走正规渠道 —— 并记住：抽赏的期望值永远低于你付的钱。</span>
+				</div>`;
+
+			$("tg-auto").addEventListener("click", () => {
+				autoNext = !autoNext;
+				$("tg-auto").classList.toggle("on", autoNext);
+				renderNav();
+			});
+			$("tg-rivals").addEventListener("click", () => {
+				rivalsOn = !rivalsOn;
+				$("tg-rivals").classList.toggle("on", rivalsOn);
+				$("online-n").textContent = rivalsOn ? activeRivals.length + 1 : 1;
+				$("rival-strip").textContent = rivalsOn
+					? "大家都在抽这一箱，手快有手慢无"
+					: "已关闭其他玩家 —— 整箱都是你的了";
+			});
+			$("btn-wipe").addEventListener("click", wipe);
+		}
+
+		$("sheet-title").textContent = title;
+		$("scrim").classList.add("open");
+	}
+
+	/* =========================================================
+	   Settlement
+	   ========================================================= */
+	function settle() {
+		const s = session;
+		if (s.draws === 0) { alert("你还一发都没抽呢 🙃"); return; }
+		const rate = s.value / s.spent;
+		const net = s.value - s.spent;
+		const r = rating(rate);
+
+		$("r-em").textContent = r.em;
+		$("r-rank").textContent = r.name;
+		$("r-draws").textContent = s.draws + " 发";
+		$("r-spent").textContent = money(s.spent);
+		$("r-value").textContent = money0(s.value);
+		$("r-cost").textContent = moneyS(s.cost);
+		$("r-net").textContent = (net >= 0 ? "+" : "−") + money0(Math.abs(net));
+		$("r-net").style.color = net >= 0 ? "#6ba32f" : "#e8453c";
+		$("r-rate").textContent = (rate * 100).toFixed(1) + "%";
+
+		const markup = s.cost > 0 ? (s.spent / s.cost).toFixed(1) : "—";
+		const milk = Math.floor(s.spent / 18);
+		$("r-fine").innerHTML =
+			r.line + "<br><br>" +
+			"· 抽空了 <b>" + s.boxesCleared + "</b> 箱，拿到 <b>" + s.rare + "</b> 个大奖、<b>" + s.junk + "</b> 包纸巾。<br>" +
+			"· 你「付」的钱是这堆东西工厂成本的 <b>" + markup + "</b> 倍。<br>" +
+			"· 换算成现实：约 <b>" + milk + "</b> 杯奶茶。<br><br>" +
+			"所有金额都是这个页面编出来的数字，页面没有支付功能，也没有服务器。";
+
+		$("result-scrim").classList.add("open");
+	}
+
+	function wipe() {
+		if (!confirm("清空本场战绩、赏袋和生涯记录？（反正也没花钱）")) return;
+		round = 1;
+		session = { draws: 0, spent: 0, value: 0, cost: 0, boxesCleared: 0, rare: 0, junk: 0 };
+		bag = new Map();
+		log = [];
+		lifetime = { draws: 0, spent: 0, value: 0, cost: 0, rounds: 0 };
+		saveLifetime();
+		newRound(false);
+		$("scrim").classList.remove("open");
+		renderPrizes(); renderNav(); renderStats();
+	}
+
+	/* =========================================================
+	   Rival players — they draw from the SAME box you do.
+	   Nothing is reserved for you.
+	   ========================================================= */
+	const RIVALS = [
+		{ name: "微***7",  av: "🙂" }, { name: "小***子", av: "😺" },
+		{ name: "抽***王", av: "😎" }, { name: "欧***酱", av: "🥰" },
+		{ name: "纸***侠", av: "🧻" }, { name: "西***瓜", av: "🍉" },
+		{ name: "月***兔", av: "🐰" }, { name: "菠***萝", av: "🍍" },
+		{ name: "草***莓", av: "🍓" }, { name: "夜***猫", av: "🌙" }
+	];
+	let rivalsOn = true;
+	let activeRivals = shuffle(RIVALS.slice()).slice(0, 5);
+
+	function toast(rival, text, hot) {
+		const el = document.createElement("div");
+		el.className = "toast" + (hot ? " hot" : "");
+		el.innerHTML = '<span class="av">' + (rival ? rival.av : "📢") + '</span><span>' + text + '</span>';
+		const holder = $("toasts");
+		holder.appendChild(el);
+		if (holder.children.length > 3) holder.removeChild(holder.firstChild);
+		setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 3900);
+	}
+
+	function rivalTick() {
+		if (!rivalsOn || busy) return;
+
+		if (Math.random() < 0.25) {
+			activeRivals = shuffle(RIVALS.slice()).slice(0, 3 + Math.floor(Math.random() * 7));
+			$("online-n").textContent = activeRivals.length + 1;
+			$("join-text").textContent = pick(activeRivals).name + " 来啦";
+		}
+
+		if (roundLeft() === 0) {
+			newRound(true);
+			toast(null, "本场已抽空 —— 新系列「" + series.title + "」开箱了", false);
+			renderPrizes(); renderNav();
+			return;
+		}
+
+		const rival = pick(activeRivals);
+		const got = [];
+		const n = 1 + Math.floor(Math.random() * 3);
+		for (let i = 0; i < n; i++) {
+			const open = [];
+			for (let k = 0; k < BOXES_PER_ROUND; k++) if (boxes[k].tickets.length > 0) open.push(k);
+			if (!open.length) break;
+			const g = pullFrom(pick(open), false);
+			if (!g) break;
+			g.forEach(x => got.push(x));
+		}
+		if (!got.length) return;
+
+		got.forEach(it => log.unshift(Object.assign({}, it, { t: new Date(), by: rival.name })));
+		if (log.length > 200) log.length = 200;
+
+		const best = got.filter(g => g.rare).pop();
+		if (best) {
+			toast(rival, `<b>${rival.name}</b> 抽走了 <b>${best.rank}赏 ${best.name}</b>！`, true);
+			$("rival-strip").innerHTML = `刚刚 <b>${rival.name}</b> 抽走了 ${best.rank}赏 ${best.name} —— 手快有手慢无`;
+		} else if (Math.random() < 0.55) {
+			const top = got.slice().sort((a, b2) => b2.value - a.value)[0];
+			toast(rival, `<b>${rival.name}</b> 抽了 ${got.length} 发，中 ${top.rank}赏`, false);
+		}
+
+		renderPrizes();
+		renderNav();
+	}
+
+	(function scheduleRival() {
+		setTimeout(() => { rivalTick(); scheduleRival(); }, 3200 + Math.random() * 5200);
+	})();
+
+	/* =========================================================
+	   Wiring
+	   ========================================================= */
+	document.querySelectorAll("[data-open]").forEach(el =>
+		el.addEventListener("click", () => openSheet(el.dataset.open)));
+	document.querySelectorAll("[data-draw]").forEach(el =>
+		el.addEventListener("click", () => draw(Number(el.dataset.draw))));
+
+	$("btn-allin").addEventListener("click", () => draw(box().tickets.length));
+	$("sheet-close").addEventListener("click", () => $("scrim").classList.remove("open"));
+	$("scrim").addEventListener("click", e => { if (e.target === $("scrim")) $("scrim").classList.remove("open"); });
+
+	$("prev-box").addEventListener("click", () => { if (cur > 0) { cur -= 1; renderPrizes(); renderNav(); } });
+	$("next-box").addEventListener("click", () => { if (cur < BOXES_PER_ROUND - 1) { cur += 1; renderPrizes(); renderNav(); } });
+
+	$("rv-close").addEventListener("click", () => $("reveal").classList.remove("open"));
+	$("rv-again").addEventListener("click", () => { if (!busy) draw(lastDrawN); });
+
+	$("act-settle").addEventListener("click", settle);
+	$("r-close").addEventListener("click", () => $("result-scrim").classList.remove("open"));
+	$("result-scrim").addEventListener("click", e => {
+		if (e.target === $("result-scrim")) $("result-scrim").classList.remove("open");
+	});
+
+	function freshRound() {
+		if (busy) return;
+		newRound(true);
+		toast(null, "换了一箱新的 —— 本场是「" + series.title + "」", false);
+		renderPrizes(); renderNav();
+	}
+	$("act-newround").addEventListener("click", freshRound);
+	$("tab-newround").addEventListener("click", freshRound);
+
+	(function () {
+		const d = new Date();
+		d.setMonth(d.getMonth() + 1);
+		$("ship-month").textContent = d.getFullYear() + "年" + String(d.getMonth() + 1).padStart(2, "0") + "月";
+	})();
+
+	$("online-n").textContent = activeRivals.length + 1;
+
+	// boot
+	newRound(false);
+	renderPrizes();
+	renderNav();
+	renderStats();
+})();
+
+</script>
+</body>
+</html>
