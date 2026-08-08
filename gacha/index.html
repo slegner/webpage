@@ -655,11 +655,18 @@
 <div class="scrim result-scrim" id="result-scrim">
 	<div class="result">
 		<div class="result-head">
-			<div class="ttl">🧾 结算单</div>
+			<div class="ttl">🧾 本场结算</div>
+			<div class="sr" id="r-series">随机赏</div>
 			<div class="em" id="r-em">🍀</div>
 			<div class="rk" id="r-rank">平民玩家</div>
+			<div class="luck"><span id="r-luck"></span></div>
+			<div class="luckcap" id="r-luckcap">回本率 0%</div>
 		</div>
 		<div class="result-body">
+			<div class="bigline">
+				<div><span class="k">抽了</span><b id="r-bigdraws">0</b><span class="u">发</span></div>
+				<div><span class="k">「花」掉</span><b id="r-bigspent" class="spend">¥0</b></div>
+			</div>
 			<ul>
 				<li><span>总共抽了</span><b id="r-draws">0 发</b></li>
 				<li><span>「花」掉</span><b id="r-spent">¥0</b></li>
@@ -669,6 +676,10 @@
 				<li><span>回本率</span><b id="r-rate">0%</b></li>
 			</ul>
 			<div class="punch">💚 而你实际支付了 <b>¥0.00</b><br>钱包毫发无伤，快乐照收</div>
+
+			<div class="haul-head">🎁 你抽到的全部东西 <span id="r-haulcount">0 件</span></div>
+			<div class="haul" id="r-haul"></div>
+
 			<div class="fine" id="r-fine"></div>
 			<button class="dbtn" id="r-close"><div class="t">继续抽</div></button>
 		</div>
