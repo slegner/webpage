@@ -7,7 +7,7 @@
 
 	<!-- SEO Meta Tags -->
 	<meta name="description" content="Astrophotography gallery by Sinah Legner featuring deep sky images of nebulae, galaxies, and star clusters captured with Dwarf3 telescope.">
-	<meta name="keywords" content="astrophotography, Orion Nebula, Horsehead Nebula, Heart Nebula, Christmas Tree Cluster, Pacman Nebula, North America Nebula, Andromeda Galaxy, Pleiades, Comet, Barnard's Loop, star trail, Huangshan, M42, B33, IC 1805, NGC 2264, NGC 281, NGC 7000, M31, M45, Sh 2-276, Dwarf3, deep sky imaging">
+	<meta name="keywords" content="astrophotography, total solar eclipse, 2026 solar eclipse, Aguilar de Campoo, Orion Nebula, Horsehead Nebula, Heart Nebula, Christmas Tree Cluster, Pacman Nebula, North America Nebula, Andromeda Galaxy, Pleiades, Comet, Barnard's Loop, star trail, Huangshan, M42, B33, IC 1805, NGC 2264, NGC 281, NGC 7000, M31, M45, Sh 2-276, Dwarf3, deep sky imaging">
 	<meta name="author" content="Sinah Legner">
 	<meta name="robots" content="index, follow">
 	<link rel="canonical" href="https://slegner.co.uk/astrophotography/">
@@ -53,6 +53,16 @@
 				<h2>Astrophotography</h2>
 				<p class="gallery-note">Post processing done with <a href="https://siril.org/" target="_blank" rel="noopener noreferrer">Siril</a></p>
 				<div class="gallery-grid">
+					<div class="gallery-item" data-alt-src="../images/Astrophotography/2026Eclipse_cycle-opt.jpg" data-alt-label="View the full eclipse cycle →" data-alt-back-label="← View totality">
+						<img src="../images/Astrophotography/2026_Eclipse.jpg" alt="Total solar eclipse" loading="lazy">
+						<div class="image-overlay">
+							<h3>Total Solar Eclipse</h3>
+							<p>Taken: 12th August 2026</p>
+							<p>Location: Aguilar de Campoo, Spain</p>
+							<p>Equipment: Dwarf3</p>
+							<p>Auto settings</p>
+						</div>
+					</div>
 					<div class="gallery-item">
 						<img src="../images/Astrophotography/Whirlpool.png" alt="Whirlpool Galaxy" loading="lazy">
 						<div class="image-overlay">
@@ -97,7 +107,7 @@
 							<p>Second overexposed image for moons, composited in Photoshop</p>
 						</div>
 					</div>
-					<div class="gallery-item" data-has-video="true" data-video-src="../images/Astrophotography/3iatlas.gif">
+					<div class="gallery-item" data-alt-src="../images/Astrophotography/3iatlas.gif" data-alt-label="View video showing movement →" data-alt-back-label="← View stacked image">
 						<img src="../images/Astrophotography/3iatlas-opt.jpg" alt="Comet 3I/ATLAS" loading="lazy">
 						<div class="image-overlay">
 							<h3>Comet 3I/ATLAS</h3>
@@ -246,7 +256,7 @@
 		<span class="lightbox-close">&times;</span>
 		<img class="lightbox-content" id="lightbox-img">
 		<div class="lightbox-video-link" id="lightbox-video-link" style="display: none;">
-			<a href="#" id="toggle-video-link">View video showing movement →</a>
+			<a href="#" id="toggle-video-link">View next image →</a>
 		</div>
 		<div class="lightbox-caption" id="lightbox-caption"></div>
 	</div>
@@ -262,46 +272,47 @@
 		const galleryItems = document.querySelectorAll('.gallery-item');
 
 		let currentImageSrc = '';
-		let currentVideoSrc = '';
-		let showingVideo = false;
+		let currentAltSrc = '';
+		let altLabel = '';
+		let altBackLabel = '';
+		let showingAlt = false;
 
 		galleryItems.forEach(item => {
 			item.addEventListener('click', function() {
 				const img = this.querySelector('img');
 				const overlay = this.querySelector('.image-overlay');
-				const hasVideo = this.getAttribute('data-has-video');
-				const videoSrc = this.getAttribute('data-video-src');
+				const altSrc = this.getAttribute('data-alt-src');
 
 				lightbox.style.display = 'flex';
 				currentImageSrc = img.src;
 				lightboxImg.src = currentImageSrc;
 				lightboxCaption.innerHTML = overlay.innerHTML;
-				showingVideo = false;
+				showingAlt = false;
 
-				// Show video link if video exists
-				if (hasVideo === 'true' && videoSrc) {
-					currentVideoSrc = videoSrc;
+				// Show toggle link if a second image/video exists
+				if (altSrc) {
+					currentAltSrc = altSrc;
+					altLabel = this.getAttribute('data-alt-label') || 'View next image →';
+					altBackLabel = this.getAttribute('data-alt-back-label') || '← View previous image';
 					lightboxVideoLink.style.display = 'block';
-					toggleVideoLink.textContent = 'View video showing movement →';
+					toggleVideoLink.textContent = altLabel;
 				} else {
 					lightboxVideoLink.style.display = 'none';
 				}
 			});
 		});
 
-		// Toggle between image and video
+		// Toggle between the two views
 		toggleVideoLink.addEventListener('click', function(e) {
 			e.preventDefault();
-			if (showingVideo) {
-				// Switch to image
+			if (showingAlt) {
 				lightboxImg.src = currentImageSrc;
-				toggleVideoLink.textContent = 'View video showing movement →';
-				showingVideo = false;
+				toggleVideoLink.textContent = altLabel;
+				showingAlt = false;
 			} else {
-				// Switch to video
-				lightboxImg.src = currentVideoSrc;
-				toggleVideoLink.textContent = '← View stacked image';
-				showingVideo = true;
+				lightboxImg.src = currentAltSrc;
+				toggleVideoLink.textContent = altBackLabel;
+				showingAlt = true;
 			}
 		});
 
